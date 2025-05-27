@@ -205,15 +205,6 @@ async def delete_product(product_id: str):
         raise HTTPException(status_code=404, detail="Product not found")
     return {"message": "Product deleted successfully"}
 
-@api_router.get("/products/featured", response_model=List[Product])
-async def get_featured_products(limit: int = 6):
-    """Get featured products (high rating, active status)"""
-    products = await db.products.find({
-        "status": "active", 
-        "rating": {"$gte": 4.0}
-    }).sort("rating", -1).limit(limit).to_list(limit)
-    return [Product(**product) for product in products]
-
 @api_router.get("/products/category/{category}", response_model=List[Product])
 async def get_products_by_category(category: ProductCategory):
     """Get all products in a specific category"""
