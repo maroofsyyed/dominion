@@ -1136,18 +1136,57 @@ export const exercises = {
 
 // Mock user progress data
 export const mockUserProgress = {
+  // Horizontal Pull
   'german-hang': { status: 'completed', completedDate: '2024-01-15', holdTime: '30s' },
   'skin-the-cat': { status: 'completed', completedDate: '2024-01-20', reps: '5x3' },
   'tuck-back-lever': { status: 'current', startedDate: '2024-01-25', progress: 75 },
   'adv-tuck-back-lever': { status: 'locked', progress: 0 },
   'tuck-front-lever': { status: 'locked', progress: 0 },
+  'adv-tuck-front-lever': { status: 'locked', progress: 0 },
+  'straddle-front-lever': { status: 'locked', progress: 0 },
+  'one-leg-front-lever': { status: 'locked', progress: 0 },
+  'front-lever': { status: 'locked', progress: 0 },
+
+  // Vertical Pull  
   'vertical-row': { status: 'completed', completedDate: '2024-01-10', reps: '3x12' },
   'incline-row': { status: 'completed', completedDate: '2024-01-18', reps: '3x10' },
   'horizontal-row': { status: 'current', startedDate: '2024-01-22', progress: 60 },
+  'wide-row': { status: 'locked', progress: 0 },
+  'archer-row': { status: 'locked', progress: 0 },
+  'ring-l-sit-pull-up': { status: 'locked', progress: 0 },
+  'muscle-up': { status: 'locked', progress: 0 },
+  'one-arm-pull-up': { status: 'locked', progress: 0 },
+
+  // Vertical Push
   'scapular-shrug': { status: 'completed', completedDate: '2024-01-12', reps: '3x15' },
+  'arch-hang': { status: 'completed', completedDate: '2024-01-16', holdTime: '20s' },
+  'pull-to-inverted': { status: 'current', startedDate: '2024-01-24', progress: 45 },
+  'handstand': { status: 'locked', progress: 0 },
+  'handstand-push-up': { status: 'locked', progress: 0 },
+  'human-flag': { status: 'locked', progress: 0 },
+
+  // Horizontal Push
+  'foot-sup-l-sit': { status: 'completed', completedDate: '2024-01-14', holdTime: '25s' },
+  'one-leg-l-sit': { status: 'current', startedDate: '2024-01-20', progress: 70 },
+  'l-sit': { status: 'locked', progress: 0 },
+  'planche': { status: 'locked', progress: 0 },
+  'one-arm-handstand': { status: 'locked', progress: 0 },
+
+  // Core
   'support-hold': { status: 'completed', completedDate: '2024-01-14', holdTime: '45s' },
+  'dip': { status: 'completed', completedDate: '2024-01-19', reps: '3x8' },
+  'ring-dip': { status: 'current', startedDate: '2024-01-23', progress: 65 },
+  'wall-handstand': { status: 'locked', progress: 0 },
+  'freestanding-handstand': { status: 'locked', progress: 0 },
+  'ring-planche-push-up': { status: 'locked', progress: 0 },
+
+  // Legs
   'assisted-squat': { status: 'completed', completedDate: '2024-01-08', reps: '3x15' },
-  'parallel-squat': { status: 'current', startedDate: '2024-01-16', progress: 80 }
+  'parallel-squat': { status: 'completed', completedDate: '2024-01-16', reps: '3x12' },
+  'full-squat': { status: 'current', startedDate: '2024-01-21', progress: 80 },
+  'pistol-squat': { status: 'locked', progress: 0 },
+  'shrimp-squat': { status: 'locked', progress: 0 },
+  'one-leg-nordic-curl': { status: 'locked', progress: 0 }
 };
 
 // Function to get exercises by category
