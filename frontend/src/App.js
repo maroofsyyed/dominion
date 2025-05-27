@@ -8,7 +8,9 @@ import {
   CommunitySection, 
   SignupModal,
   SkillTree,
-  ExerciseDetail
+  ExerciseDetail,
+  ShopPage,
+  ProductDetailPage
 } from './components';
 import { 
   RadialBarChart, 
