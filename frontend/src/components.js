@@ -1216,3 +1216,630 @@ export const SignupModal = ({ isOpen, onClose }) => {
     </AnimatePresence>
   );
 };
+
+// ================================
+// SHOP COMPONENTS
+// ================================
+
+// 3D Product Viewer Component
+const Product3DViewer = ({ modelUrl, productName }) => {
+  const meshRef = useRef();
+  
+  // Simple rotating cube as placeholder since actual GLB models would need to be loaded
+  const RotatingBox = () => {
+    useFrame((state) => {
+      if (meshRef.current) {
+        meshRef.current.rotation.y = state.clock.elapsedTime * 0.5;
+      }
+    });
+
+    return (
+      <mesh ref={meshRef}>
+        <boxGeometry args={[2, 2, 2]} />
+        <meshStandardMaterial 
+          color="#10b981" 
+          metalness={0.7} 
+          roughness={0.3}
+        />
+      </mesh>
+    );
+  };
+
+  return (
+    <div className="w-full h-96 bg-gradient-to-br from-gray-900 to-gray-800 rounded-lg overflow-hidden">
+      <Canvas
+        camera={{ position: [0, 0, 6], fov: 50 }}
+        style={{ height: '100%' }}
+      >
+        <Suspense fallback={null}>
+          <ambientLight intensity={0.5} />
+          <directionalLight 
+            position={[10, 10, 5]} 
+            intensity={1} 
+            castShadow
+          />
+          <PresentationControls
+            global
+            rotation={[0.13, 0.1, 0]}
+            polar={[-0.4, 0.2]}
+            azimuth={[-1, 0.75]}
+            config={{ mass: 2, tension: 400 }}
+            snap={{ mass: 4, tension: 400 }}
+          >
+            <RotatingBox />
+          </PresentationControls>
+          <ContactShadows
+            rotation-x={Math.PI / 2}
+            position={[0, -1.4, 0]}
+            opacity={0.75}
+            width={10}
+            height={10}
+            blur={2.6}
+            far={2}
+          />
+          <Environment preset="city" />
+        </Suspense>
+      </Canvas>
+    </div>
+  );
+};
+
+// Product Card Component
+const ProductCard = ({ product, onViewProduct, onAddToCart }) => {
+  const [isLiked, setIsLiked] = useState(false);
+
+  return (
+    <motion.div
+      className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300"
+      whileHover={{ y: -5 }}
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+    >
+      {/* Product Image */}
+      <div className="relative h-64 bg-gradient-to-br from-gray-100 to-gray-200">
+        <img 
+          src={product.images[0]} 
+          alt={product.name}
+          className="w-full h-full object-cover"
+        />
+        
+        {/* Discount Badge */}
+        {product.discount_price && (
+          <div className="absolute top-3 left-3 bg-red-500 text-white px-2 py-1 rounded-full text-xs font-semibold">
+            SALE
+          </div>
+        )}
+        
+        {/* Like Button */}
+        <button
+          onClick={() => setIsLiked(!isLiked)}
+          className={`absolute top-3 right-3 p-2 rounded-full transition-colors ${
+            isLiked ? 'bg-red-500 text-white' : 'bg-white text-gray-600'
+          }`}
+        >
+          <Heart size={16} fill={isLiked ? 'white' : 'none'} />
+        </button>
+        
+        {/* Quick View Button */}
+        <button
+          onClick={() => onViewProduct(product)}
+          className="absolute bottom-3 right-3 bg-emerald-500 text-white p-2 rounded-full hover:bg-emerald-600 transition-colors"
+        >
+          <Eye size={16} />
+        </button>
+      </div>
+      
+      {/* Product Info */}
+      <div className="p-4">
+        <div className="flex items-center gap-2 mb-2">
+          <span className="text-xs bg-emerald-100 text-emerald-800 px-2 py-1 rounded-full capitalize">
+            {product.category}
+          </span>
+          <div className="flex items-center text-yellow-500">
+            <Star size={12} fill="currentColor" />
+            <span className="text-xs text-gray-600 ml-1">
+              {product.rating} ({product.review_count})
+            </span>
+          </div>
+        </div>
+        
+        <h3 className="font-semibold text-gray-900 mb-2 line-clamp-2">
+          {product.name}
+        </h3>
+        
+        <p className="text-sm text-gray-600 mb-3 line-clamp-2">
+          {product.description}
+        </p>
+        
+        {/* Pricing */}
+        <div className="flex items-center justify-between mb-3">
+          <div className="flex items-center gap-2">
+            {product.discount_price ? (
+              <>
+                <span className="text-lg font-bold text-emerald-600">
+                  ${product.discount_price}
+                </span>
+                <span className="text-sm text-gray-500 line-through">
+                  ${product.price}
+                </span>
+              </>
+            ) : (
+              <span className="text-lg font-bold text-gray-900">
+                ${product.price}
+              </span>
+            )}
+          </div>
+          
+          {/* Stock Status */}
+          <span className={`text-xs px-2 py-1 rounded-full ${
+            product.stock_quantity > 0 
+              ? 'bg-green-100 text-green-800' 
+              : 'bg-red-100 text-red-800'
+          }`}>
+            {product.stock_quantity > 0 ? 'In Stock' : 'Out of Stock'}
+          </span>
+        </div>
+        
+        {/* Action Buttons */}
+        <div className="flex gap-2">
+          <button
+            onClick={() => onViewProduct(product)}
+            className="flex-1 bg-gray-100 text-gray-900 py-2 px-4 rounded-lg hover:bg-gray-200 transition-colors text-sm font-medium"
+          >
+            View Details
+          </button>
+          <button
+            onClick={() => onAddToCart(product)}
+            disabled={product.stock_quantity === 0}
+            className="flex-1 bg-emerald-500 text-white py-2 px-4 rounded-lg hover:bg-emerald-600 disabled:bg-gray-300 transition-colors text-sm font-medium"
+          >
+            Add to Cart
+          </button>
+        </div>
+      </div>
+    </motion.div>
+  );
+};
+
+// Shop Header Component
+const ShopHeader = ({ searchQuery, setSearchQuery, viewMode, setViewMode, selectedCategory, setSelectedCategory }) => {
+  const categories = [
+    { id: 'all', label: 'All Products' },
+    { id: 'equipment', label: 'Equipment' },
+    { id: 'supplements', label: 'Supplements' },
+    { id: 'accessories', label: 'Accessories' },
+    { id: 'apparel', label: 'Apparel' }
+  ];
+
+  return (
+    <div className="bg-white rounded-xl shadow-lg p-6 mb-8">
+      {/* Hero Section */}
+      <div className="mb-8">
+        <h1 className="text-4xl font-bold text-gray-900 mb-2">
+          Calisthenics Shop
+        </h1>
+        <p className="text-gray-600 text-lg">
+          Premium equipment and gear for your calisthenics journey
+        </p>
+      </div>
+      
+      {/* Search and Filters */}
+      <div className="flex flex-col lg:flex-row gap-4 items-center justify-between">
+        {/* Search Bar */}
+        <div className="relative flex-1 max-w-md">
+          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
+          <input
+            type="text"
+            placeholder="Search products..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
+          />
+        </div>
+        
+        {/* Category Filter */}
+        <div className="flex gap-2 flex-wrap">
+          {categories.map((category) => (
+            <button
+              key={category.id}
+              onClick={() => setSelectedCategory(category.id)}
+              className={`px-4 py-2 rounded-lg font-medium transition-colors ${
+                selectedCategory === category.id
+                  ? 'bg-emerald-500 text-white'
+                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+              }`}
+            >
+              {category.label}
+            </button>
+          ))}
+        </div>
+        
+        {/* View Mode Toggle */}
+        <div className="flex bg-gray-100 rounded-lg p-1">
+          <button
+            onClick={() => setViewMode('grid')}
+            className={`p-2 rounded-md transition-colors ${
+              viewMode === 'grid' ? 'bg-white shadow-sm' : ''
+            }`}
+          >
+            <Grid size={20} />
+          </button>
+          <button
+            onClick={() => setViewMode('list')}
+            className={`p-2 rounded-md transition-colors ${
+              viewMode === 'list' ? 'bg-white shadow-sm' : ''
+            }`}
+          >
+            <List size={20} />
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// Main Shop Page Component
+export const ShopPage = () => {
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState('all');
+  const [viewMode, setViewMode] = useState('grid');
+  const navigate = useNavigate();
+
+  // Fetch products from API
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/products`);
+        if (response.ok) {
+          const data = await response.json();
+          setProducts(data);
+        }
+      } catch (error) {
+        console.error('Error fetching products:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProducts();
+  }, []);
+
+  // Filter products based on search and category
+  const filteredProducts = products.filter(product => {
+    const matchesSearch = product.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                         product.description.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesCategory = selectedCategory === 'all' || product.category === selectedCategory;
+    return matchesSearch && matchesCategory;
+  });
+
+  const handleViewProduct = (product) => {
+    navigate(`/shop/product/${product.id}`);
+  };
+
+  const handleAddToCart = (product) => {
+    // TODO: Implement cart functionality
+    console.log('Added to cart:', product.name);
+  };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-emerald-50 to-teal-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-emerald-500 mx-auto mb-4"></div>
+          <p className="text-gray-600">Loading products...</p>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-emerald-50 to-teal-50 py-12">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <ShopHeader
+          searchQuery={searchQuery}
+          setSearchQuery={setSearchQuery}
+          viewMode={viewMode}
+          setViewMode={setViewMode}
+          selectedCategory={selectedCategory}
+          setSelectedCategory={setSelectedCategory}
+        />
+
+        {/* Featured Hero Banner */}
+        <div className="relative mb-12 rounded-2xl overflow-hidden">
+          <img 
+            src="https://images.pexels.com/photos/7671467/pexels-photo-7671467.jpeg"
+            alt="Shop Hero"
+            className="w-full h-64 object-cover"
+          />
+          <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+            <div className="text-center text-white">
+              <h2 className="text-3xl font-bold mb-4">Premium Calisthenics Gear</h2>
+              <p className="text-lg mb-6">Transform your training with professional equipment</p>
+              <button className="bg-emerald-500 text-white px-8 py-3 rounded-lg font-semibold hover:bg-emerald-600 transition-colors">
+                Shop Now
+              </button>
+            </div>
+          </div>
+        </div>
+
+        {/* Products Grid */}
+        <div className={`grid gap-6 ${
+          viewMode === 'grid' 
+            ? 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4' 
+            : 'grid-cols-1'
+        }`}>
+          {filteredProducts.map((product) => (
+            <ProductCard
+              key={product.id}
+              product={product}
+              onViewProduct={handleViewProduct}
+              onAddToCart={handleAddToCart}
+            />
+          ))}
+        </div>
+
+        {/* No Products Found */}
+        {filteredProducts.length === 0 && !loading && (
+          <div className="text-center py-12">
+            <Package size={64} className="mx-auto text-gray-400 mb-4" />
+            <h3 className="text-xl font-semibold text-gray-900 mb-2">No products found</h3>
+            <p className="text-gray-600">Try adjusting your search or filters</p>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
+
+// Product Detail Page Component
+export const ProductDetailPage = () => {
+  const { productId } = useParams();
+  const navigate = useNavigate();
+  const [product, setProduct] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [selectedImage, setSelectedImage] = useState(0);
+  const [quantity, setQuantity] = useState(1);
+
+  useEffect(() => {
+    const fetchProduct = async () => {
+      try {
+        const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/products/${productId}`);
+        if (response.ok) {
+          const data = await response.json();
+          setProduct(data);
+        } else {
+          navigate('/shop');
+        }
+      } catch (error) {
+        console.error('Error fetching product:', error);
+        navigate('/shop');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProduct();
+  }, [productId, navigate]);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-emerald-50 to-teal-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-emerald-500 mx-auto mb-4"></div>
+          <p className="text-gray-600">Loading product...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (!product) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-emerald-50 to-teal-50 flex items-center justify-center">
+        <div className="text-center">
+          <p className="text-gray-600">Product not found</p>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-emerald-50 to-teal-50 py-12">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Breadcrumb */}
+        <div className="flex items-center gap-2 mb-8 text-sm text-gray-600">
+          <button onClick={() => navigate('/shop')} className="hover:text-emerald-600">
+            Shop
+          </button>
+          <ChevronRight size={16} />
+          <span className="capitalize">{product.category}</span>
+          <ChevronRight size={16} />
+          <span className="text-gray-900">{product.name}</span>
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+          {/* Product Images & 3D Viewer */}
+          <div className="space-y-6">
+            {/* 3D Product Viewer */}
+            <div className="bg-white rounded-xl shadow-lg p-6">
+              <h3 className="text-lg font-semibold mb-4">3D Product View</h3>
+              <Product3DViewer modelUrl={product.assets_3d.model_url} productName={product.name} />
+              <p className="text-sm text-gray-600 mt-2 text-center">
+                Click and drag to rotate • Scroll to zoom
+              </p>
+            </div>
+
+            {/* Traditional Images */}
+            <div className="bg-white rounded-xl shadow-lg p-6">
+              <img 
+                src={product.images[selectedImage]} 
+                alt={product.name}
+                className="w-full h-96 object-cover rounded-lg mb-4"
+              />
+              <div className="flex gap-2 overflow-x-auto">
+                {product.images.map((image, index) => (
+                  <button
+                    key={index}
+                    onClick={() => setSelectedImage(index)}
+                    className={`flex-shrink-0 w-20 h-20 rounded-lg overflow-hidden border-2 ${
+                      selectedImage === index ? 'border-emerald-500' : 'border-gray-200'
+                    }`}
+                  >
+                    <img src={image} alt={`${product.name} ${index + 1}`} className="w-full h-full object-cover" />
+                  </button>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* Product Details */}
+          <div className="bg-white rounded-xl shadow-lg p-8">
+            <div className="mb-6">
+              <div className="flex items-center gap-2 mb-2">
+                <span className="text-sm bg-emerald-100 text-emerald-800 px-2 py-1 rounded-full capitalize">
+                  {product.category}
+                </span>
+                <div className="flex items-center text-yellow-500">
+                  <Star size={16} fill="currentColor" />
+                  <span className="text-sm text-gray-600 ml-1">
+                    {product.rating} ({product.review_count} reviews)
+                  </span>
+                </div>
+              </div>
+              
+              <h1 className="text-3xl font-bold text-gray-900 mb-4">{product.name}</h1>
+              
+              <div className="flex items-center gap-4 mb-6">
+                {product.discount_price ? (
+                  <>
+                    <span className="text-3xl font-bold text-emerald-600">
+                      ${product.discount_price}
+                    </span>
+                    <span className="text-xl text-gray-500 line-through">
+                      ${product.price}
+                    </span>
+                    <span className="bg-red-500 text-white px-2 py-1 rounded-full text-sm">
+                      Save ${(product.price - product.discount_price).toFixed(2)}
+                    </span>
+                  </>
+                ) : (
+                  <span className="text-3xl font-bold text-gray-900">
+                    ${product.price}
+                  </span>
+                )}
+              </div>
+            </div>
+
+            <p className="text-gray-700 mb-6 leading-relaxed">
+              {product.long_description}
+            </p>
+
+            {/* Features */}
+            <div className="mb-6">
+              <h3 className="text-lg font-semibold mb-3">Key Features</h3>
+              <ul className="space-y-2">
+                {product.features.map((feature, index) => (
+                  <li key={index} className="flex items-center gap-2">
+                    <CheckCircle size={16} className="text-emerald-500" />
+                    <span className="text-gray-700">{feature}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* Specifications */}
+            <div className="mb-6">
+              <h3 className="text-lg font-semibold mb-3">Specifications</h3>
+              <div className="grid grid-cols-2 gap-4 text-sm">
+                {product.specifications.dimensions && (
+                  <div>
+                    <span className="font-medium text-gray-900">Dimensions:</span>
+                    <span className="text-gray-600 ml-2">{product.specifications.dimensions}</span>
+                  </div>
+                )}
+                {product.specifications.weight && (
+                  <div>
+                    <span className="font-medium text-gray-900">Weight:</span>
+                    <span className="text-gray-600 ml-2">{product.specifications.weight}</span>
+                  </div>
+                )}
+                {product.specifications.material && (
+                  <div>
+                    <span className="font-medium text-gray-900">Material:</span>
+                    <span className="text-gray-600 ml-2">{product.specifications.material}</span>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* Color Options */}
+            {product.specifications.color_options.length > 0 && (
+              <div className="mb-6">
+                <h3 className="text-lg font-semibold mb-3">Color Options</h3>
+                <div className="flex gap-2">
+                  {product.specifications.color_options.map((color, index) => (
+                    <button
+                      key={index}
+                      className="px-3 py-1 border border-gray-300 rounded-lg text-sm hover:border-emerald-500"
+                    >
+                      {color}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Quantity & Add to Cart */}
+            <div className="border-t pt-6">
+              <div className="flex items-center gap-4 mb-6">
+                <div className="flex items-center gap-3">
+                  <span className="font-medium">Quantity:</span>
+                  <div className="flex items-center border border-gray-300 rounded-lg">
+                    <button
+                      onClick={() => setQuantity(Math.max(1, quantity - 1))}
+                      className="p-2 hover:bg-gray-100"
+                    >
+                      <Minus size={16} />
+                    </button>
+                    <span className="px-4 py-2 font-medium">{quantity}</span>
+                    <button
+                      onClick={() => setQuantity(quantity + 1)}
+                      className="p-2 hover:bg-gray-100"
+                    >
+                      <Plus size={16} />
+                    </button>
+                  </div>
+                </div>
+                
+                <div className={`text-sm px-3 py-1 rounded-full ${
+                  product.stock_quantity > 0 
+                    ? 'bg-green-100 text-green-800' 
+                    : 'bg-red-100 text-red-800'
+                }`}>
+                  {product.stock_quantity > 0 
+                    ? `${product.stock_quantity} in stock` 
+                    : 'Out of stock'
+                  }
+                </div>
+              </div>
+
+              <div className="flex gap-4">
+                <button
+                  disabled={product.stock_quantity === 0}
+                  className="flex-1 bg-emerald-500 text-white py-3 px-6 rounded-lg font-semibold hover:bg-emerald-600 disabled:bg-gray-300 transition-colors flex items-center justify-center gap-2"
+                >
+                  <ShoppingCart size={20} />
+                  Add to Cart
+                </button>
+                <button className="px-6 py-3 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
+                  <Heart size={20} />
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
