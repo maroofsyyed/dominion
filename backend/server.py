@@ -1,4 +1,4 @@
-from fastapi import FastAPI, APIRouter
+from fastapi import FastAPI, APIRouter, HTTPException
 from dotenv import load_dotenv
 from starlette.middleware.cors import CORSMiddleware
 from motor.motor_asyncio import AsyncIOMotorClient
@@ -6,9 +6,10 @@ import os
 import logging
 from pathlib import Path
 from pydantic import BaseModel, Field
-from typing import List
+from typing import List, Optional, Dict, Any
 import uuid
 from datetime import datetime
+from enum import Enum
 
 
 ROOT_DIR = Path(__file__).parent
@@ -26,6 +27,19 @@ app = FastAPI()
 api_router = APIRouter(prefix="/api")
 
 
+# Define Enums
+class ProductCategory(str, Enum):
+    equipment = "equipment"
+    supplements = "supplements"
+    accessories = "accessories"
+    apparel = "apparel"
+
+class ProductStatus(str, Enum):
+    active = "active"
+    inactive = "inactive"
+    out_of_stock = "out_of_stock"
+
+
 # Define Models
 class StatusCheck(BaseModel):
     id: str = Field(default_factory=lambda: str(uuid.uuid4()))
@@ -34,6 +48,72 @@ class StatusCheck(BaseModel):
 
 class StatusCheckCreate(BaseModel):
     client_name: str
+
+# Product Models
+class Product3DAsset(BaseModel):
+    model_url: str  # URL to 3D model file (GLB/GLTF)
+    texture_urls: List[str] = []  # Additional texture files
+    preview_image: str  # Preview image for 3D model
+
+class ProductSpecs(BaseModel):
+    dimensions: Optional[str] = None
+    weight: Optional[str] = None
+    material: Optional[str] = None
+    color_options: List[str] = []
+    additional_specs: Dict[str, Any] = {}
+
+class Product(BaseModel):
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    name: str
+    description: str
+    long_description: str
+    category: ProductCategory
+    price: float
+    discount_price: Optional[float] = None
+    currency: str = "USD"
+    images: List[str]  # Regular product images
+    assets_3d: Product3DAsset
+    specifications: ProductSpecs
+    features: List[str] = []
+    tags: List[str] = []
+    stock_quantity: int = 0
+    status: ProductStatus = ProductStatus.active
+    rating: float = 0.0
+    review_count: int = 0
+    created_at: datetime = Field(default_factory=datetime.utcnow)
+    updated_at: datetime = Field(default_factory=datetime.utcnow)
+
+class ProductCreate(BaseModel):
+    name: str
+    description: str
+    long_description: str
+    category: ProductCategory
+    price: float
+    discount_price: Optional[float] = None
+    currency: str = "USD"
+    images: List[str]
+    assets_3d: Product3DAsset
+    specifications: ProductSpecs
+    features: List[str] = []
+    tags: List[str] = []
+    stock_quantity: int = 0
+    status: ProductStatus = ProductStatus.active
+
+class ProductUpdate(BaseModel):
+    name: Optional[str] = None
+    description: Optional[str] = None
+    long_description: Optional[str] = None
+    category: Optional[ProductCategory] = None
+    price: Optional[float] = None
+    discount_price: Optional[float] = None
+    images: Optional[List[str]] = None
+    assets_3d: Optional[Product3DAsset] = None
+    specifications: Optional[ProductSpecs] = None
+    features: Optional[List[str]] = None
+    tags: Optional[List[str]] = None
+    stock_quantity: Optional[int] = None
+    status: Optional[ProductStatus] = None
+    updated_at: datetime = Field(default_factory=datetime.utcnow)
 
 # Add your routes to the router instead of directly to app
 @api_router.get("/")
