@@ -4,7 +4,7 @@ import json
 from datetime import datetime
 
 class CalisthenicsProductTester:
-    def __init__(self, base_url="https://eeb0a883-d501-4ef2-b55d-1b02ec9385a3.preview.emergentagent.com"):
+    def __init__(self, base_url="https://d10517c8-a2cc-43ed-8798-fb61a8d9c86e.preview.emergentagent.com"):
         self.base_url = base_url
         self.tests_run = 0
         self.tests_passed = 0
