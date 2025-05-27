@@ -159,6 +159,21 @@ async def get_products(
     products = await db.products.find(filter_dict).skip(skip).limit(limit).to_list(limit)
     return [Product(**product) for product in products]
 
+@api_router.get("/products/featured", response_model=List[Product])
+async def get_featured_products(limit: int = 6):
+    """Get featured products (high rating, active status)"""
+    products = await db.products.find({
+        "status": "active", 
+        "rating": {"$gte": 4.0}
+    }).sort("rating", -1).limit(limit).to_list(limit)
+    return [Product(**product) for product in products]
+
+@api_router.get("/products/category/{category}", response_model=List[Product])
+async def get_products_by_category(category: ProductCategory):
+    """Get all products in a specific category"""
+    products = await db.products.find({"category": category, "status": "active"}).to_list(1000)
+    return [Product(**product) for product in products]
+
 @api_router.get("/products/{product_id}", response_model=Product)
 async def get_product(product_id: str):
     """Get a specific product by ID"""
