@@ -52,7 +52,8 @@ export const Header = ({ activeSection, setActiveSection, showSignup, setShowSig
     { id: 'categories', label: 'Exercise Categories', path: '/categories' },
     { id: 'progress', label: 'Progress Tracker', path: '/progress' },
     { id: 'community', label: 'Community', path: '/community' },
-    { id: 'leaderboard', label: 'Leaderboard', path: '/leaderboard' }
+    { id: 'leaderboard', label: 'Leaderboard', path: '/leaderboard' },
+    { id: 'shop', label: 'Shop', path: '/shop' }
   ];
 
   const handleNavigation = (item) => {
