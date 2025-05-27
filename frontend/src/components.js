@@ -2424,26 +2424,8 @@ export const ContactPage = () => {
                     <span className="text-white font-semibold">M</span>
                   </div>
                   <div>
-                    <p className="font-semibold text-emerald-900">Maroof Singh</p>
-                    <p className="text-sm text-gray-600">Lead Fitness Consultant - IIT Bombay</p>
-                  </div>
-                </div>
-                <div className="flex items-center space-x-3">
-                  <div className="w-10 h-10 bg-gradient-to-br from-emerald-400 to-green-600 rounded-full flex items-center justify-center">
-                    <span className="text-white font-semibold">V</span>
-                  </div>
-                  <div>
-                    <p className="font-semibold text-emerald-900">Vishal Sharma</p>
-                    <p className="text-sm text-gray-600">Nutrition Specialist - IIT Delhi</p>
-                  </div>
-                </div>
-                <div className="flex items-center space-x-3">
-                  <div className="w-10 h-10 bg-gradient-to-br from-emerald-400 to-green-600 rounded-full flex items-center justify-center">
-                    <span className="text-white font-semibold">A</span>
-                  </div>
-                  <div>
-                    <p className="font-semibold text-emerald-900">Aryan Patel</p>
-                    <p className="text-sm text-gray-600">Training Program Director - IIT Kanpur</p>
+                    <p className="font-semibold text-emerald-900">Maroof Akhtar</p>
+                    <p className="text-sm text-gray-600">Founder & Lead Fitness Consultant</p>
                   </div>
                 </div>
               </div>
