@@ -9,6 +9,7 @@ import {
   Phone, 
   Mail, 
   Calendar, 
+  Clock,
   Users, 
   Trophy, 
   Target,
