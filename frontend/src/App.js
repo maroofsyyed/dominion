@@ -1,12 +1,28 @@
 import React, { useState, useEffect } from 'react';
 import './App.css';
+import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import { 
   Header, 
   HeroSection, 
   ExerciseCategoriesSection, 
   CommunitySection, 
-  SignupModal 
+  SignupModal,
+  SkillTree,
+  ExerciseDetail
 } from './components';
+import { 
+  RadialBarChart, 
+  RadialBar, 
+  ResponsiveContainer, 
+  LineChart, 
+  Line, 
+  XAxis, 
+  YAxis, 
+  CartesianGrid, 
+  Tooltip 
+} from 'recharts';
+import { motion } from 'framer-motion';
+import { exerciseCategories, getExercisesByCategory, mockUserProgress } from './data/exercises';
 
 function App() {
   const [activeSection, setActiveSection] = useState('home');
@@ -29,67 +45,172 @@ function App() {
     { rank: 5, name: 'David Kim', university: 'Caltech', points: 4560, city: 'Pasadena' }
   ];
 
-  // Progress Tracker Section
-  const ProgressSection = () => (
-    <section className="min-h-screen bg-gradient-to-br from-gray-900 to-emerald-900 pt-24 px-6">
-      <div className="max-w-7xl mx-auto">
-        <div className="text-center mb-12">
-          <h2 className="text-5xl font-bold text-white mb-6">Your Progress Journey</h2>
-          <p className="text-xl text-gray-300">Track your evolution from beginner to elite athlete</p>
+  // Enhanced Progress Dashboard with Charts
+  const ProgressSection = () => {
+    const strengthData = [
+      { name: 'Horizontal Pull', current: 65, max: 100, color: '#10b981' },
+      { name: 'Vertical Pull', current: 78, max: 100, color: '#059669' },
+      { name: 'Horizontal Push', current: 45, max: 100, color: '#047857' },
+      { name: 'Vertical Push', current: 52, max: 100, color: '#065f46' },
+      { name: 'Core', current: 71, max: 100, color: '#064e3b' },
+      { name: 'Legs', current: 83, max: 100, color: '#0f766e' }
+    ];
+
+    const weeklyProgress = [
+      { day: 'Mon', skills: 2 },
+      { day: 'Tue', skills: 1 },
+      { day: 'Wed', skills: 3 },
+      { day: 'Thu', skills: 1 },
+      { day: 'Fri', skills: 2 },
+      { day: 'Sat', skills: 4 },
+      { day: 'Sun', skills: 2 }
+    ];
+
+    return (
+      <section className="min-h-screen bg-gradient-to-br from-gray-900 to-emerald-900 pt-24 px-6">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-12">
+            <h2 className="text-5xl font-bold text-white mb-6">Your Progress Journey</h2>
+            <p className="text-xl text-gray-300">Track your evolution from beginner to elite athlete</p>
+          </div>
+
+          {/* Main Stats Grid */}
+          <div className="grid lg:grid-cols-3 gap-8 mb-12">
+            {/* Current Stats */}
+            <div className="bg-gradient-to-br from-emerald-800/50 to-green-900/50 rounded-2xl border border-emerald-600/30 p-6">
+              <h3 className="text-2xl font-bold text-white mb-4">Current Stats</h3>
+              <div className="space-y-4">
+                <div className="flex justify-between">
+                  <span className="text-gray-300">Level:</span>
+                  <span className="text-emerald-400 font-semibold">{mockProgressData.currentLevel}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-gray-300">Total Points:</span>
+                  <span className="text-emerald-400 font-semibold">{mockProgressData.totalPoints}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-gray-300">Streak:</span>
+                  <span className="text-emerald-400 font-semibold">{mockProgressData.streak} days</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-gray-300">Skills Unlocked:</span>
+                  <span className="text-emerald-400 font-semibold">{mockProgressData.skillsUnlocked}</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Strength Radar Chart */}
+            <div className="bg-gradient-to-br from-green-800/50 to-emerald-900/50 rounded-2xl border border-emerald-600/30 p-6">
+              <h3 className="text-2xl font-bold text-white mb-4">Strength Profile</h3>
+              <ResponsiveContainer width="100%" height={200}>
+                <RadialBarChart cx="50%" cy="50%" innerRadius="20%" outerRadius="80%" data={strengthData}>
+                  <RadialBar dataKey="current" cornerRadius={10} fill="#10b981" />
+                </RadialBarChart>
+              </ResponsiveContainer>
+            </div>
+
+            {/* Next Challenge */}
+            <div className="bg-gradient-to-br from-emerald-800/50 to-green-900/50 rounded-2xl border border-emerald-600/30 p-6">
+              <h3 className="text-2xl font-bold text-white mb-4">Next Challenge</h3>
+              <div className="text-center">
+                <div className="text-3xl font-bold text-emerald-400 mb-2">{mockProgressData.nextSkill}</div>
+                <div className="text-gray-300 mb-4">85% Progress</div>
+                <div className="bg-emerald-800 rounded-full h-3 mb-4">
+                  <motion.div 
+                    className="bg-emerald-400 h-3 rounded-full"
+                    initial={{ width: 0 }}
+                    animate={{ width: '85%' }}
+                    transition={{ duration: 2, delay: 0.5 }}
+                  />
+                </div>
+                <button className="bg-gradient-to-r from-emerald-500 to-green-600 text-white px-6 py-2 rounded-lg font-semibold hover:from-emerald-600 hover:to-green-700 transition-all">
+                  Train Now
+                </button>
+              </div>
+            </div>
+          </div>
+
+          {/* Weekly Progress Chart */}
+          <div className="bg-gradient-to-br from-emerald-800/50 to-green-900/50 rounded-2xl border border-emerald-600/30 p-8 mb-12">
+            <h3 className="text-2xl font-bold text-white mb-6">Weekly Progress</h3>
+            <ResponsiveContainer width="100%" height={300}>
+              <LineChart data={weeklyProgress}>
+                <CartesianGrid strokeDasharray="3 3" stroke="#065f46" />
+                <XAxis dataKey="day" stroke="#9ca3af" />
+                <YAxis stroke="#9ca3af" />
+                <Tooltip 
+                  contentStyle={{
+                    backgroundColor: '#064e3b',
+                    border: '1px solid #10b981',
+                    borderRadius: '8px'
+                  }}
+                />
+                <Line 
+                  type="monotone" 
+                  dataKey="skills" 
+                  stroke="#10b981" 
+                  strokeWidth={3}
+                  dot={{ fill: '#10b981', strokeWidth: 2, r: 6 }}
+                />
+              </LineChart>
+            </ResponsiveContainer>
+          </div>
+
+          {/* Category Progress */}
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {strengthData.map((category, index) => (
+              <motion.div
+                key={category.name}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: index * 0.1 }}
+                className="bg-gradient-to-br from-emerald-800/50 to-green-900/50 rounded-xl border border-emerald-600/30 p-6"
+              >
+                <h4 className="text-white font-semibold mb-3">{category.name}</h4>
+                <div className="flex justify-between text-sm text-gray-400 mb-2">
+                  <span>Progress</span>
+                  <span>{category.current}%</span>
+                </div>
+                <div className="bg-emerald-900/50 rounded-full h-2">
+                  <motion.div 
+                    className="bg-emerald-400 h-2 rounded-full"
+                    initial={{ width: 0 }}
+                    whileInView={{ width: `${category.current}%` }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 1, delay: index * 0.1 }}
+                  />
+                </div>
+              </motion.div>
+            ))}
+          </div>
         </div>
+      </section>
+    );
+  };
 
-        <div className="grid lg:grid-cols-3 gap-8 mb-12">
-          {/* Stats Cards */}
-          <div className="bg-gradient-to-br from-emerald-800/50 to-green-900/50 rounded-2xl border border-emerald-600/30 p-6">
-            <h3 className="text-2xl font-bold text-white mb-4">Current Stats</h3>
-            <div className="space-y-4">
-              <div className="flex justify-between">
-                <span className="text-gray-300">Level:</span>
-                <span className="text-emerald-400 font-semibold">{mockProgressData.currentLevel}</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-gray-300">Total Points:</span>
-                <span className="text-emerald-400 font-semibold">{mockProgressData.totalPoints}</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-gray-300">Streak:</span>
-                <span className="text-emerald-400 font-semibold">{mockProgressData.streak} days</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-gray-300">Skills Unlocked:</span>
-                <span className="text-emerald-400 font-semibold">{mockProgressData.skillsUnlocked}</span>
-              </div>
-            </div>
-          </div>
-
-          {/* Next Skill Card */}
-          <div className="bg-gradient-to-br from-green-800/50 to-emerald-900/50 rounded-2xl border border-emerald-600/30 p-6">
-            <h3 className="text-2xl font-bold text-white mb-4">Next Challenge</h3>
-            <div className="text-center">
-              <div className="text-3xl font-bold text-emerald-400 mb-2">{mockProgressData.nextSkill}</div>
-              <div className="text-gray-300 mb-4">85% Progress</div>
-              <div className="bg-emerald-800 rounded-full h-3 mb-4">
-                <div className="bg-emerald-400 h-3 rounded-full w-[85%]"></div>
-              </div>
-              <button className="bg-gradient-to-r from-emerald-500 to-green-600 text-white px-6 py-2 rounded-lg font-semibold hover:from-emerald-600 hover:to-green-700 transition-all">
-                Train Now
-              </button>
-            </div>
-          </div>
-
-          {/* Achievement Card */}
-          <div className="bg-gradient-to-br from-emerald-800/50 to-green-900/50 rounded-2xl border border-emerald-600/30 p-6">
-            <h3 className="text-2xl font-bold text-white mb-4">Recent Achievement</h3>
-            <div className="text-center">
-              <div className="text-4xl mb-2">🏆</div>
-              <div className="text-lg font-semibold text-emerald-400 mb-2">Pull-up Master</div>
-              <div className="text-gray-300 text-sm">Completed 15 consecutive pull-ups</div>
-            </div>
+  // Category Page Component
+  const CategoryPage = () => {
+    const location = useLocation();
+    const categoryId = location.pathname.split('/').pop();
+    const category = exerciseCategories[categoryId];
+    
+    if (!category) {
+      return (
+        <div className="min-h-screen bg-gradient-to-br from-gray-900 to-emerald-900 pt-24 px-6">
+          <div className="max-w-4xl mx-auto text-center">
+            <h1 className="text-4xl font-bold text-white mb-4">Category Not Found</h1>
           </div>
         </div>
+      );
+    }
+
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-gray-900 to-emerald-900 pt-24 px-6">
+        <SkillTree categoryId={categoryId} />
       </div>
-    </section>
-  );
+    );
+  };
 
   // Leaderboard Section
   const LeaderboardSection = () => (
@@ -107,8 +228,12 @@ function App() {
           <div className="p-6">
             <div className="space-y-4">
               {mockLeaderboard.map((athlete, index) => (
-                <div 
+                <motion.div 
                   key={athlete.rank}
+                  initial={{ opacity: 0, x: -20 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: index * 0.1 }}
                   className={`flex items-center justify-between p-4 rounded-lg transition-all hover:bg-emerald-700/30 ${
                     index < 3 ? 'bg-gradient-to-r from-emerald-600/20 to-green-600/20' : 'bg-emerald-800/30'
                   }`}
@@ -128,7 +253,7 @@ function App() {
                     </div>
                   </div>
                   <div className="text-emerald-400 font-bold text-lg">{athlete.points}</div>
-                </div>
+                </motion.div>
               ))}
             </div>
           </div>
@@ -202,14 +327,21 @@ function App() {
               { user: "Mike R.", action: "achieved new handstand PR", time: "6 hours ago", university: "BU" },
               { user: "Emma T.", action: "joined Boston meetup group", time: "1 day ago", university: "Northeastern" }
             ].map((activity, index) => (
-              <div key={index} className="flex items-center justify-between p-4 bg-emerald-700/30 rounded-lg">
+              <motion.div 
+                key={index} 
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: index * 0.1 }}
+                className="flex items-center justify-between p-4 bg-emerald-700/30 rounded-lg"
+              >
                 <div>
                   <span className="font-semibold text-white">{activity.user}</span>
                   <span className="text-gray-300"> {activity.action}</span>
                   <div className="text-sm text-gray-400">{activity.university} • {activity.time}</div>
                 </div>
                 <div className="text-emerald-400">🎉</div>
-              </div>
+              </motion.div>
             ))}
           </div>
         </div>
@@ -217,50 +349,37 @@ function App() {
     </section>
   );
 
-  const renderSection = () => {
-    switch (activeSection) {
-      case 'home':
-        return (
-          <div>
-            <HeroSection setShowSignup={setShowSignup} />
-            <ExerciseCategoriesSection />
-            <CommunitySection setShowSignup={setShowSignup} />
-          </div>
-        );
-      case 'categories':
-        return <ExerciseCategoriesSection />;
-      case 'progress':
-        return <ProgressSection />;
-      case 'community':
-        return <CommunityMainSection />;
-      case 'leaderboard':
-        return <LeaderboardSection />;
-      default:
-        return (
-          <div>
-            <HeroSection setShowSignup={setShowSignup} />
-            <ExerciseCategoriesSection />
-            <CommunitySection setShowSignup={setShowSignup} />
-          </div>
-        );
-    }
-  };
-
   return (
     <div className="App">
-      <Header 
-        activeSection={activeSection} 
-        setActiveSection={setActiveSection}
-        showSignup={showSignup}
-        setShowSignup={setShowSignup}
-      />
-      
-      {renderSection()}
-      
-      <SignupModal 
-        isOpen={showSignup} 
-        onClose={() => setShowSignup(false)} 
-      />
+      <Router>
+        <Header 
+          activeSection={activeSection} 
+          setActiveSection={setActiveSection}
+          showSignup={showSignup}
+          setShowSignup={setShowSignup}
+        />
+        
+        <Routes>
+          <Route path="/" element={
+            <div>
+              <HeroSection setShowSignup={setShowSignup} />
+              <ExerciseCategoriesSection />
+              <CommunitySection setShowSignup={setShowSignup} />
+            </div>
+          } />
+          <Route path="/categories" element={<ExerciseCategoriesSection />} />
+          <Route path="/category/:categoryId" element={<CategoryPage />} />
+          <Route path="/exercise/:exerciseId" element={<ExerciseDetail />} />
+          <Route path="/progress" element={<ProgressSection />} />
+          <Route path="/community" element={<CommunityMainSection />} />
+          <Route path="/leaderboard" element={<LeaderboardSection />} />
+        </Routes>
+        
+        <SignupModal 
+          isOpen={showSignup} 
+          onClose={() => setShowSignup(false)} 
+        />
+      </Router>
     </div>
   );
 }

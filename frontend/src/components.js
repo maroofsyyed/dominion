@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useNavigate, useParams } from 'react-router-dom';
 import { 
   User, 
   MapPin, 
@@ -21,20 +22,44 @@ import {
   TrendingUp,
   Award,
   Globe,
-  UserCheck
+  UserCheck,
+  Lock,
+  Unlock,
+  Timer,
+  RotateCcw,
+  Home,
+  ArrowLeft,
+  ExternalLink
 } from 'lucide-react';
+import { RadialBarChart, RadialBar, PieChart, Pie, Cell, ResponsiveContainer, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip } from 'recharts';
+import { 
+  exercises, 
+  exerciseCategories, 
+  skillLevels, 
+  mockUserProgress, 
+  getExercisesByCategory, 
+  isExerciseUnlocked,
+  getNextUnlockableExercises 
+} from './data/exercises';
 
 // Header Component
 export const Header = ({ activeSection, setActiveSection, showSignup, setShowSignup }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const navigate = useNavigate();
 
   const navItems = [
-    { id: 'home', label: 'Home' },
-    { id: 'categories', label: 'Exercise Categories' },
-    { id: 'progress', label: 'Progress Tracker' },
-    { id: 'community', label: 'Community' },
-    { id: 'leaderboard', label: 'Leaderboard' }
+    { id: 'home', label: 'Home', path: '/' },
+    { id: 'categories', label: 'Exercise Categories', path: '/categories' },
+    { id: 'progress', label: 'Progress Tracker', path: '/progress' },
+    { id: 'community', label: 'Community', path: '/community' },
+    { id: 'leaderboard', label: 'Leaderboard', path: '/leaderboard' }
   ];
+
+  const handleNavigation = (item) => {
+    setActiveSection(item.id);
+    navigate(item.path);
+    setIsMenuOpen(false);
+  };
 
   return (
     <motion.header 
@@ -46,8 +71,9 @@ export const Header = ({ activeSection, setActiveSection, showSignup, setShowSig
         <div className="flex items-center justify-between">
           {/* Logo */}
           <motion.div 
-            className="flex items-center space-x-3"
+            className="flex items-center space-x-3 cursor-pointer"
             whileHover={{ scale: 1.05 }}
+            onClick={() => handleNavigation({ id: 'home', path: '/' })}
           >
             <div className="w-10 h-10 bg-gradient-to-br from-emerald-400 to-green-600 rounded-lg flex items-center justify-center">
               <Trophy className="w-6 h-6 text-white" />
@@ -60,7 +86,7 @@ export const Header = ({ activeSection, setActiveSection, showSignup, setShowSig
             {navItems.map((item) => (
               <motion.button
                 key={item.id}
-                onClick={() => setActiveSection(item.id)}
+                onClick={() => handleNavigation(item)}
                 className={`text-sm font-medium transition-colors ${
                   activeSection === item.id 
                     ? 'text-emerald-300' 
@@ -106,10 +132,7 @@ export const Header = ({ activeSection, setActiveSection, showSignup, setShowSig
               {navItems.map((item) => (
                 <button
                   key={item.id}
-                  onClick={() => {
-                    setActiveSection(item.id);
-                    setIsMenuOpen(false);
-                  }}
+                  onClick={() => handleNavigation(item)}
                   className={`block w-full text-left py-2 px-4 rounded-lg transition-colors ${
                     activeSection === item.id 
                       ? 'text-emerald-300 bg-emerald-800/50' 
@@ -237,31 +260,30 @@ export const HeroSection = ({ setShowSignup }) => {
   );
 };
 
-// Exercise Categories Section
+// Enhanced Exercise Categories Section
 export const ExerciseCategoriesSection = () => {
-  const categories = [
-    {
-      title: "Horizontal Pull",
-      description: "Master pull-ups, front levers, and advanced pulling movements",
-      image: "https://images.pexels.com/photos/4803695/pexels-photo-4803695.jpeg",
-      skills: ["German Hang", "Front Lever", "360° Pull", "One Arm Pull-up"],
-      color: "from-emerald-600 to-green-700"
-    },
-    {
-      title: "Vertical Push", 
-      description: "Develop handstand strength and pressing power",
-      image: "https://images.unsplash.com/photo-1606827728401-939ad3483e7b",
-      skills: ["Handstand", "Handstand Push-up", "One Arm Handstand", "Planche"],
-      color: "from-green-600 to-emerald-700"
-    },
-    {
-      title: "Core Mastery",
-      description: "Build unbreakable core strength and stability",
-      image: "https://images.pexels.com/photos/4803682/pexels-photo-4803682.jpeg",
-      skills: ["L-Sit", "V-Sit", "Manna", "Human Flag"],
-      color: "from-teal-600 to-emerald-700"
-    }
-  ];
+  const navigate = useNavigate();
+  
+  const categories = Object.values(exerciseCategories).map(category => ({
+    ...category,
+    exercises: getExercisesByCategory(category.id),
+    completedCount: getExercisesByCategory(category.id).filter(ex => 
+      mockUserProgress[ex.id]?.status === 'completed'
+    ).length,
+    totalCount: getExercisesByCategory(category.id).length
+  }));
+
+  const getColorClasses = (color) => {
+    const colorMap = {
+      emerald: 'from-emerald-600 to-green-700',
+      green: 'from-green-600 to-emerald-700', 
+      teal: 'from-teal-600 to-emerald-700',
+      cyan: 'from-cyan-600 to-teal-700',
+      lime: 'from-lime-600 to-green-700',
+      forest: 'from-green-700 to-emerald-800'
+    };
+    return colorMap[color] || 'from-emerald-600 to-green-700';
+  };
 
   return (
     <section className="py-24 bg-gradient-to-br from-gray-900 to-emerald-900">
@@ -273,52 +295,69 @@ export const ExerciseCategoriesSection = () => {
           className="text-center mb-16"
         >
           <h2 className="text-5xl font-bold text-white mb-6">
-            We make the <span className="text-emerald-400">complex simple</span>.
+            Master the <span className="text-emerald-400">Six Pillars</span>
           </h2>
           <p className="text-xl text-gray-300 max-w-3xl mx-auto">
-            Master six essential movement categories through progressive skill development
+            Progress through comprehensive skill trees in each fundamental movement category
           </p>
         </motion.div>
 
-        <div className="grid md:grid-cols-3 gap-8">
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
           {categories.map((category, index) => (
             <motion.div
-              key={category.title}
+              key={category.id}
               initial={{ opacity: 0, y: 50 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ delay: index * 0.2 }}
-              className="group relative bg-gradient-to-br from-emerald-800/50 to-green-900/50 rounded-2xl border border-emerald-600/30 overflow-hidden hover:border-emerald-500/50 transition-all duration-500"
+              transition={{ delay: index * 0.1 }}
+              className="group relative bg-gradient-to-br from-emerald-800/50 to-green-900/50 rounded-2xl border border-emerald-600/30 overflow-hidden hover:border-emerald-500/50 transition-all duration-500 cursor-pointer"
               whileHover={{ y: -10 }}
+              onClick={() => navigate(`/category/${category.id}`)}
             >
               <div className="aspect-video relative overflow-hidden">
                 <img 
                   src={category.image}
-                  alt={category.title}
+                  alt={category.name}
                   className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                 />
-                <div className={`absolute inset-0 bg-gradient-to-t ${category.color}/60 to-transparent`}></div>
+                <div className={`absolute inset-0 bg-gradient-to-t ${getColorClasses(category.color)}/60 to-transparent`}></div>
+                
+                {/* Progress overlay */}
+                <div className="absolute top-4 right-4 bg-black/50 backdrop-blur-sm rounded-full px-3 py-1">
+                  <span className="text-white text-sm font-semibold">
+                    {category.completedCount}/{category.totalCount}
+                  </span>
+                </div>
               </div>
               
               <div className="p-6">
-                <h3 className="text-2xl font-bold text-white mb-3">{category.title}</h3>
+                <h3 className="text-2xl font-bold text-white mb-3">{category.name}</h3>
                 <p className="text-gray-300 mb-4">{category.description}</p>
                 
-                <div className="space-y-2">
-                  {category.skills.map((skill, skillIndex) => (
-                    <div key={skill} className="flex items-center space-x-2">
-                      <div className="w-2 h-2 bg-emerald-400 rounded-full"></div>
-                      <span className="text-sm text-gray-300">{skill}</span>
-                    </div>
-                  ))}
+                {/* Progress bar */}
+                <div className="mb-4">
+                  <div className="flex justify-between text-sm text-gray-400 mb-2">
+                    <span>Progress</span>
+                    <span>{Math.round((category.completedCount / category.totalCount) * 100)}%</span>
+                  </div>
+                  <div className="bg-emerald-900/50 rounded-full h-2">
+                    <motion.div 
+                      className={`bg-gradient-to-r ${getColorClasses(category.color)} h-2 rounded-full`}
+                      initial={{ width: 0 }}
+                      whileInView={{ width: `${(category.completedCount / category.totalCount) * 100}%` }}
+                      viewport={{ once: true }}
+                      transition={{ duration: 1, delay: index * 0.1 }}
+                    />
+                  </div>
                 </div>
 
                 <motion.button
-                  className="mt-6 w-full bg-gradient-to-r from-emerald-500 to-green-600 text-white py-3 rounded-lg font-semibold hover:from-emerald-600 hover:to-green-700 transition-all"
+                  className={`w-full bg-gradient-to-r ${getColorClasses(category.color)} text-white py-3 rounded-lg font-semibold hover:opacity-90 transition-all flex items-center justify-center space-x-2`}
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                 >
-                  Explore Skills
+                  <span>Explore Skills</span>
+                  <ChevronRight className="w-4 h-4" />
                 </motion.button>
               </div>
             </motion.div>
@@ -326,6 +365,397 @@ export const ExerciseCategoriesSection = () => {
         </div>
       </div>
     </section>
+  );
+};
+
+// Skill Tree Visualization Component
+export const SkillTree = ({ categoryId }) => {
+  const exercises = getExercisesByCategory(categoryId);
+  const category = exerciseCategories[categoryId];
+  
+  const skillsByLevel = {
+    beginner: exercises.filter(ex => ex.skillLevel === 'beginner'),
+    intermediate: exercises.filter(ex => ex.skillLevel === 'intermediate'),
+    advanced: exercises.filter(ex => ex.skillLevel === 'advanced'),
+    elite: exercises.filter(ex => ex.skillLevel === 'elite')
+  };
+
+  const getSkillLevelColor = (level) => {
+    const colorMap = {
+      beginner: 'bg-green-500',
+      intermediate: 'bg-blue-500', 
+      advanced: 'bg-yellow-500',
+      elite: 'bg-orange-500'
+    };
+    return colorMap[level] || 'bg-gray-500';
+  };
+
+  const getSkillStatus = (exerciseId) => {
+    const progress = mockUserProgress[exerciseId];
+    if (!progress) return isExerciseUnlocked(exerciseId) ? 'unlocked' : 'locked';
+    return progress.status;
+  };
+
+  const navigate = useNavigate();
+
+  return (
+    <div className="max-w-6xl mx-auto">
+      <div className="text-center mb-12">
+        <h2 className="text-4xl font-bold text-white mb-4">{category.name} Skill Tree</h2>
+        <p className="text-gray-300">{category.description}</p>
+      </div>
+
+      <div className="space-y-12">
+        {Object.entries(skillsByLevel).map(([level, levelExercises]) => (
+          <div key={level} className="relative">
+            <div className="flex items-center mb-6">
+              <div className={`w-4 h-4 rounded-full ${getSkillLevelColor(level)} mr-3`}></div>
+              <h3 className="text-2xl font-bold text-white capitalize">{level}</h3>
+              <div className="ml-4 text-sm text-gray-400">
+                {levelExercises.filter(ex => getSkillStatus(ex.id) === 'completed').length} / {levelExercises.length} completed
+              </div>
+            </div>
+            
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {levelExercises.map((exercise, index) => {
+                const status = getSkillStatus(exercise.id);
+                const progress = mockUserProgress[exercise.id];
+                
+                return (
+                  <motion.div
+                    key={exercise.id}
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: index * 0.1 }}
+                    className={`relative bg-gradient-to-br from-emerald-800/50 to-green-900/50 rounded-xl border border-emerald-600/30 p-4 transition-all duration-300 cursor-pointer ${
+                      status === 'locked' ? 'opacity-50' : 'hover:border-emerald-400/50 hover:scale-105'
+                    }`}
+                    onClick={() => status !== 'locked' && navigate(`/exercise/${exercise.id}`)}
+                  >
+                    {/* Status indicator */}
+                    <div className="absolute top-2 right-2">
+                      {status === 'locked' && <Lock className="w-4 h-4 text-gray-500" />}
+                      {status === 'unlocked' && <Unlock className="w-4 h-4 text-yellow-500" />}
+                      {status === 'current' && <Timer className="w-4 h-4 text-blue-500" />}
+                      {status === 'completed' && <CheckCircle className="w-4 h-4 text-green-500" />}
+                    </div>
+
+                    <h4 className="text-white font-semibold mb-2 pr-6">{exercise.name}</h4>
+                    <p className="text-gray-400 text-sm mb-3 line-clamp-2">{exercise.description}</p>
+                    
+                    {/* Progress bar for current exercise */}
+                    {status === 'current' && progress?.progress && (
+                      <div className="mb-3">
+                        <div className="flex justify-between text-xs text-gray-400 mb-1">
+                          <span>Progress</span>
+                          <span>{progress.progress}%</span>
+                        </div>
+                        <div className="bg-emerald-900/50 rounded-full h-1">
+                          <div 
+                            className="bg-emerald-400 h-1 rounded-full transition-all duration-500"
+                            style={{ width: `${progress.progress}%` }}
+                          />
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Completion info */}
+                    {status === 'completed' && progress && (
+                      <div className="text-xs text-green-400">
+                        ✓ Completed on {new Date(progress.completedDate).toLocaleDateString()}
+                      </div>
+                    )}
+
+                    {/* Prerequisites */}
+                    {exercise.prerequisites && exercise.prerequisites.length > 0 && (
+                      <div className="text-xs text-gray-500 mt-2">
+                        Requires: {exercise.prerequisites.join(', ')}
+                      </div>
+                    )}
+                  </motion.div>
+                );
+              })}
+            </div>
+            
+            {/* Connection lines between levels */}
+            {level !== 'elite' && (
+              <div className="absolute left-2 top-full w-0.5 h-8 bg-emerald-600/30"></div>
+            )}
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+// Exercise Detail Page Component
+export const ExerciseDetail = () => {
+  const { exerciseId } = useParams();
+  const navigate = useNavigate();
+  const exercise = exercises[exerciseId];
+  const progress = mockUserProgress[exerciseId];
+  
+  if (!exercise) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-gray-900 to-emerald-900 pt-24 px-6">
+        <div className="max-w-4xl mx-auto text-center">
+          <h1 className="text-4xl font-bold text-white mb-4">Exercise Not Found</h1>
+          <button 
+            onClick={() => navigate('/')}
+            className="bg-emerald-600 text-white px-6 py-3 rounded-lg"
+          >
+            Return Home
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  const status = progress?.status || (isExerciseUnlocked(exerciseId) ? 'unlocked' : 'locked');
+  const category = exerciseCategories[exercise.category];
+  const skillLevel = skillLevels[exercise.skillLevel];
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-gray-900 to-emerald-900 pt-24 px-6">
+      <div className="max-w-6xl mx-auto">
+        {/* Navigation breadcrumb */}
+        <div className="flex items-center space-x-2 text-gray-400 mb-8">
+          <button onClick={() => navigate('/')} className="hover:text-emerald-400 transition-colors">
+            <Home className="w-4 h-4" />
+          </button>
+          <ChevronRight className="w-4 h-4" />
+          <button 
+            onClick={() => navigate(`/category/${exercise.category}`)}
+            className="hover:text-emerald-400 transition-colors"
+          >
+            {category.name}
+          </button>
+          <ChevronRight className="w-4 h-4" />
+          <span className="text-white">{exercise.name}</span>
+        </div>
+
+        <div className="grid lg:grid-cols-3 gap-8">
+          {/* Video and main content */}
+          <div className="lg:col-span-2 space-y-8">
+            {/* Exercise header */}
+            <div className="bg-gradient-to-br from-emerald-800/50 to-green-900/50 rounded-2xl border border-emerald-600/30 p-8">
+              <div className="flex items-start justify-between mb-6">
+                <div>
+                  <h1 className="text-4xl font-bold text-white mb-2">{exercise.name}</h1>
+                  <div className="flex items-center space-x-4">
+                    <span className={`px-3 py-1 rounded-full text-sm font-semibold ${
+                      skillLevel.color === 'green' ? 'bg-green-500 text-white' :
+                      skillLevel.color === 'blue' ? 'bg-blue-500 text-white' :
+                      skillLevel.color === 'yellow' ? 'bg-yellow-500 text-black' :
+                      'bg-orange-500 text-white'
+                    }`}>
+                      {skillLevel.name}
+                    </span>
+                    <span className="text-gray-400">{category.name}</span>
+                  </div>
+                </div>
+                
+                <div className="text-right">
+                  {status === 'completed' && <CheckCircle className="w-8 h-8 text-green-500" />}
+                  {status === 'current' && <Timer className="w-8 h-8 text-blue-500" />}
+                  {status === 'unlocked' && <Unlock className="w-8 h-8 text-yellow-500" />}
+                  {status === 'locked' && <Lock className="w-8 h-8 text-gray-500" />}
+                </div>
+              </div>
+              
+              <p className="text-gray-300 text-lg leading-relaxed">{exercise.description}</p>
+            </div>
+
+            {/* Demo video */}
+            <div className="bg-gradient-to-br from-emerald-800/50 to-green-900/50 rounded-2xl border border-emerald-600/30 overflow-hidden">
+              <div className="p-6 border-b border-emerald-600/30">
+                <h3 className="text-2xl font-bold text-white mb-2">Exercise Demonstration</h3>
+                <p className="text-gray-300">Watch the proper form and technique</p>
+              </div>
+              <div className="aspect-video">
+                <iframe
+                  src={exercise.demoVideo}
+                  title={`${exercise.name} demonstration`}
+                  className="w-full h-full"
+                  frameBorder="0"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                />
+              </div>
+            </div>
+
+            {/* Instructions */}
+            <div className="bg-gradient-to-br from-emerald-800/50 to-green-900/50 rounded-2xl border border-emerald-600/30 p-8">
+              <h3 className="text-2xl font-bold text-white mb-6">Step-by-Step Instructions</h3>
+              <ol className="space-y-4">
+                {exercise.instructions.map((instruction, index) => (
+                  <li key={index} className="flex space-x-4">
+                    <span className="flex-shrink-0 w-8 h-8 bg-emerald-600 text-white rounded-full flex items-center justify-center font-semibold text-sm">
+                      {index + 1}
+                    </span>
+                    <span className="text-gray-300 leading-relaxed">{instruction}</span>
+                  </li>
+                ))}
+              </ol>
+            </div>
+
+            {/* Tips and Mistakes */}
+            <div className="grid md:grid-cols-2 gap-6">
+              <div className="bg-gradient-to-br from-green-800/50 to-emerald-900/50 rounded-2xl border border-emerald-600/30 p-6">
+                <h4 className="text-xl font-bold text-white mb-4 flex items-center">
+                  <Target className="w-5 h-5 mr-2 text-green-400" />
+                  Pro Tips
+                </h4>
+                <ul className="space-y-2">
+                  {exercise.tips.map((tip, index) => (
+                    <li key={index} className="text-gray-300 text-sm flex items-start space-x-2">
+                      <CheckCircle className="w-4 h-4 text-green-400 flex-shrink-0 mt-0.5" />
+                      <span>{tip}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              <div className="bg-gradient-to-br from-red-900/50 to-orange-900/50 rounded-2xl border border-red-600/30 p-6">
+                <h4 className="text-xl font-bold text-white mb-4 flex items-center">
+                  <X className="w-5 h-5 mr-2 text-red-400" />
+                  Common Mistakes
+                </h4>
+                <ul className="space-y-2">
+                  {exercise.commonMistakes.map((mistake, index) => (
+                    <li key={index} className="text-gray-300 text-sm flex items-start space-x-2">
+                      <X className="w-4 h-4 text-red-400 flex-shrink-0 mt-0.5" />
+                      <span>{mistake}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          {/* Sidebar */}
+          <div className="space-y-6">
+            {/* Progress card */}
+            <div className="bg-gradient-to-br from-emerald-800/50 to-green-900/50 rounded-2xl border border-emerald-600/30 p-6">
+              <h4 className="text-xl font-bold text-white mb-4">Your Progress</h4>
+              
+              {status === 'completed' && progress && (
+                <div className="space-y-3">
+                  <div className="flex items-center space-x-2 text-green-400">
+                    <CheckCircle className="w-5 h-5" />
+                    <span className="font-semibold">Completed!</span>
+                  </div>
+                  <div className="text-gray-300 text-sm">
+                    Completed on {new Date(progress.completedDate).toLocaleDateString()}
+                  </div>
+                  {progress.holdTime && (
+                    <div className="text-gray-300 text-sm">
+                      Best hold: {progress.holdTime}
+                    </div>
+                  )}
+                  {progress.reps && (
+                    <div className="text-gray-300 text-sm">
+                      Best performance: {progress.reps}
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {status === 'current' && progress && (
+                <div className="space-y-3">
+                  <div className="flex items-center space-x-2 text-blue-400">
+                    <Timer className="w-5 h-5" />
+                    <span className="font-semibold">In Progress</span>
+                  </div>
+                  <div className="text-gray-300 text-sm">
+                    Started on {new Date(progress.startedDate).toLocaleDateString()}
+                  </div>
+                  {progress.progress && (
+                    <div>
+                      <div className="flex justify-between text-sm text-gray-400 mb-1">
+                        <span>Progress</span>
+                        <span>{progress.progress}%</span>
+                      </div>
+                      <div className="bg-emerald-900/50 rounded-full h-2">
+                        <div 
+                          className="bg-emerald-400 h-2 rounded-full transition-all"
+                          style={{ width: `${progress.progress}%` }}
+                        />
+                      </div>
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {status === 'unlocked' && (
+                <div className="space-y-3">
+                  <div className="flex items-center space-x-2 text-yellow-400">
+                    <Unlock className="w-5 h-5" />
+                    <span className="font-semibold">Ready to Start</span>
+                  </div>
+                  <button className="w-full bg-emerald-600 hover:bg-emerald-700 text-white py-2 rounded-lg font-semibold transition-colors">
+                    Begin Training
+                  </button>
+                </div>
+              )}
+
+              {status === 'locked' && (
+                <div className="space-y-3">
+                  <div className="flex items-center space-x-2 text-gray-400">
+                    <Lock className="w-5 h-5" />
+                    <span className="font-semibold">Locked</span>
+                  </div>
+                  <p className="text-gray-400 text-sm">
+                    Complete prerequisite exercises to unlock this skill.
+                  </p>
+                </div>
+              )}
+            </div>
+
+            {/* Prerequisites */}
+            {exercise.prerequisites && exercise.prerequisites.length > 0 && (
+              <div className="bg-gradient-to-br from-emerald-800/50 to-green-900/50 rounded-2xl border border-emerald-600/30 p-6">
+                <h4 className="text-xl font-bold text-white mb-4">Prerequisites</h4>
+                <div className="space-y-2">
+                  {exercise.prerequisites.map(prereqId => {
+                    const prereq = exercises[prereqId];
+                    const prereqStatus = mockUserProgress[prereqId]?.status || 'locked';
+                    
+                    return (
+                      <div key={prereqId} className="flex items-center justify-between p-2 bg-emerald-900/30 rounded-lg">
+                        <span className="text-gray-300 text-sm">{prereq?.name}</span>
+                        {prereqStatus === 'completed' && <CheckCircle className="w-4 h-4 text-green-500" />}
+                        {prereqStatus !== 'completed' && <X className="w-4 h-4 text-red-500" />}
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
+
+            {/* Quick stats */}
+            <div className="bg-gradient-to-br from-emerald-800/50 to-green-900/50 rounded-2xl border border-emerald-600/30 p-6">
+              <h4 className="text-xl font-bold text-white mb-4">Exercise Stats</h4>
+              <div className="space-y-3">
+                <div className="flex justify-between">
+                  <span className="text-gray-400">Difficulty:</span>
+                  <span className="text-white">{skillLevel.name}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-gray-400">Category:</span>
+                  <span className="text-white">{category.name}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-gray-400">Order:</span>
+                  <span className="text-white">#{exercise.progressionOrder}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   );
 };
 
@@ -401,7 +831,7 @@ export const CommunitySection = ({ setShowSignup }) => {
   );
 };
 
-// Enhanced Sign-up Modal Component
+// Enhanced Sign-up Modal Component (keeping the existing implementation)
 export const SignupModal = ({ isOpen, onClose }) => {
   const [currentStep, setCurrentStep] = useState(1);
   const [formData, setFormData] = useState({
@@ -444,7 +874,6 @@ export const SignupModal = ({ isOpen, onClose }) => {
 
   const handleSubmit = () => {
     console.log('Form submitted:', formData);
-    // Here you would typically send the data to your backend
     onClose();
     setCurrentStep(1);
     setFormData({
