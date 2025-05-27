@@ -1,28 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import './App.css';
-import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Link, Navigate } from 'react-router-dom';
+import { motion, AnimatePresence } from 'framer-motion';
+import axios from 'axios';
 import { 
-  Header, 
-  HeroSection, 
-  ExerciseCategoriesSection, 
-  CommunitySection, 
-  SignupModal,
-  SkillTree,
-  ExerciseDetail,
-  ShopPage,
-  ProductDetailPage,
-  ContactPage,
-  LeaderboardSection,
-  ShopSection,
-  ExerciseCategoryDetail,
-  getProgressData,
-  isExerciseUnlocked,
-  getMockUserProgress
-} from './components';
-import { 
+  ResponsiveContainer, 
   RadialBarChart, 
   RadialBar, 
-  ResponsiveContainer, 
   LineChart, 
   Line, 
   XAxis, 
@@ -30,7 +13,20 @@ import {
   CartesianGrid, 
   Tooltip 
 } from 'recharts';
-import { motion } from 'framer-motion';
+import { 
+  ProgressChart, 
+  ProductCard, 
+  HeroSection, 
+  ExerciseCategoriesSection,
+  LeaderboardSection,
+  ShopSection,
+  ExerciseCategoryDetail,
+  ExerciseDetail, 
+  SignupModal,
+  getProgressData,
+  isExerciseUnlocked,
+  getMockUserProgress
+} from './components';
 import { exerciseCategories, getExercisesByCategory, getExerciseById } from './data/exercises';
 
 function App() {
