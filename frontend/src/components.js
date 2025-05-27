@@ -2340,6 +2340,3 @@ export const SignupModal = ({ isOpen, onClose }) => {
     </div>
   );
 };
-    streakDays: 7
-  };
-};
