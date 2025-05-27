@@ -1401,77 +1401,332 @@ const ProductCard = ({ product, onViewProduct, onAddToCart }) => {
   );
 };
 
-// Shop Header Component
-const ShopHeader = ({ searchQuery, setSearchQuery, viewMode, setViewMode, selectedCategory, setSelectedCategory }) => {
+// Enhanced Categories Component
+const CategorySection = ({ selectedCategory, setSelectedCategory, subcategory, setSubcategory }) => {
   const categories = [
-    { id: 'all', label: 'All Products' },
-    { id: 'equipment', label: 'Equipment' },
-    { id: 'supplements', label: 'Supplements' },
-    { id: 'accessories', label: 'Accessories' },
-    { id: 'apparel', label: 'Apparel' }
+    { 
+      id: 'all', 
+      label: 'All Products',
+      icon: '🏋️',
+      description: 'Complete equipment collection',
+      subcategories: []
+    },
+    { 
+      id: 'equipment', 
+      label: 'Equipment',
+      icon: '⚙️',
+      description: 'Professional training gear',
+      subcategories: [
+        { id: 'resistance-systems', label: 'Resistance & Support', count: 3 },
+        { id: 'parallettes', label: 'Parallettes', count: 3 },
+        { id: 'suspension-training', label: 'Rings & Suspension', count: 1 },
+        { id: 'weighted-training', label: 'Weighted Training', count: 3 }
+      ]
+    },
+    { 
+      id: 'accessories', 
+      label: 'Accessories',
+      icon: '🎯',
+      description: 'Grip and support gear',
+      subcategories: [
+        { id: 'grip-enhancement', label: 'Grip Enhancement', count: 2 }
+      ]
+    },
+    { 
+      id: 'apparel', 
+      label: 'Apparel',
+      icon: '👕',
+      description: 'Performance and lifestyle wear',
+      subcategories: [
+        { id: 'performance-wear', label: 'Performance Wear', count: 1 },
+        { id: 'competition-wear', label: 'Competition Wear', count: 1 },
+        { id: 'lifestyle-wear', label: 'Lifestyle Wear', count: 2 }
+      ]
+    }
   ];
 
+  const selectedCategoryData = categories.find(cat => cat.id === selectedCategory);
+
   return (
-    <div className="bg-white rounded-xl shadow-lg p-6 mb-8">
-      {/* Hero Section */}
+    <div className="bg-white rounded-2xl shadow-lg p-6 mb-8">
+      {/* Main Categories */}
       <div className="mb-8">
-        <h1 className="text-4xl font-bold text-gray-900 mb-2">
-          Calisthenics Shop
-        </h1>
-        <p className="text-gray-600 text-lg">
-          Premium equipment and gear for your calisthenics journey
-        </p>
-      </div>
-      
-      {/* Search and Filters */}
-      <div className="flex flex-col lg:flex-row gap-4 items-center justify-between">
-        {/* Search Bar */}
-        <div className="relative flex-1 max-w-md">
-          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
-          <input
-            type="text"
-            placeholder="Search products..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
-          />
-        </div>
-        
-        {/* Category Filter */}
-        <div className="flex gap-2 flex-wrap">
+        <h2 className="text-2xl font-bold text-gray-900 mb-6">Shop by Category</h2>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           {categories.map((category) => (
-            <button
+            <motion.button
               key={category.id}
-              onClick={() => setSelectedCategory(category.id)}
-              className={`px-4 py-2 rounded-lg font-medium transition-colors ${
+              onClick={() => {
+                setSelectedCategory(category.id);
+                setSubcategory('all');
+              }}
+              className={`group p-6 rounded-xl border-2 transition-all duration-300 ${
                 selectedCategory === category.id
-                  ? 'bg-emerald-500 text-white'
+                  ? 'border-emerald-500 bg-emerald-50 shadow-lg'
+                  : 'border-gray-200 bg-white hover:border-emerald-300 hover:shadow-md'
+              }`}
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+            >
+              <div className="text-3xl mb-3">{category.icon}</div>
+              <h3 className={`font-semibold text-sm md:text-base mb-2 ${
+                selectedCategory === category.id ? 'text-emerald-700' : 'text-gray-900'
+              }`}>
+                {category.label}
+              </h3>
+              <p className="text-xs text-gray-600">{category.description}</p>
+            </motion.button>
+          ))}
+        </div>
+      </div>
+
+      {/* Subcategories */}
+      {selectedCategoryData && selectedCategoryData.subcategories.length > 0 && (
+        <motion.div
+          initial={{ opacity: 0, height: 0 }}
+          animate={{ opacity: 1, height: 'auto' }}
+          transition={{ duration: 0.3 }}
+          className="border-t pt-6"
+        >
+          <h3 className="text-lg font-semibold text-gray-900 mb-4">
+            {selectedCategoryData.label} Categories
+          </h3>
+          <div className="flex flex-wrap gap-3">
+            <button
+              onClick={() => setSubcategory('all')}
+              className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 ${
+                subcategory === 'all'
+                  ? 'bg-emerald-500 text-white shadow-lg'
                   : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
               }`}
             >
-              {category.label}
+              All {selectedCategoryData.label}
             </button>
-          ))}
+            {selectedCategoryData.subcategories.map((sub) => (
+              <button
+                key={sub.id}
+                onClick={() => setSubcategory(sub.id)}
+                className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 flex items-center gap-2 ${
+                  subcategory === sub.id
+                    ? 'bg-emerald-500 text-white shadow-lg'
+                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                }`}
+              >
+                {sub.label}
+                <span className="bg-white bg-opacity-20 text-xs px-2 py-0.5 rounded-full">
+                  {sub.count}
+                </span>
+              </button>
+            ))}
+          </div>
+        </motion.div>
+      )}
+    </div>
+  );
+};
+
+// Skill-Based Bundles Component
+const SkillBundles = ({ onSelectBundle }) => {
+  const bundles = [
+    {
+      id: 'beginner-starter',
+      name: 'Beginner Starter Kit',
+      description: 'Perfect for starting your calisthenics journey',
+      image: 'https://images.pexels.com/photos/7672096/pexels-photo-7672096.jpeg',
+      products: ['premium-resistance-bands', 'elastic-bands-warmup', 'liquid-chalk-pro'],
+      originalPrice: 81.97,
+      bundlePrice: 69.97,
+      level: 'beginner'
+    },
+    {
+      id: 'muscle-up-mastery',
+      name: 'Muscle-Up Mastery Bundle',
+      description: 'Everything you need to achieve your first muscle-up',
+      image: 'https://images.pexels.com/photos/6787172/pexels-photo-6787172.jpeg',
+      products: ['workout-rings-set', 'premium-resistance-bands', 'liquid-chalk-pro'],
+      originalPrice: 146.97,
+      bundlePrice: 124.97,
+      level: 'intermediate'
+    },
+    {
+      id: 'handstand-hero',
+      name: 'Handstand Hero Bundle',
+      description: 'Master handstands with professional equipment',
+      image: 'https://images.pexels.com/photos/9944851/pexels-photo-9944851.jpeg',
+      products: ['parallettes-premium-set', 'wrist-wraps-performance', 'grip-tape-professional'],
+      originalPrice: 222.97,
+      bundlePrice: 189.97,
+      level: 'advanced'
+    },
+    {
+      id: 'weighted-warrior',
+      name: 'Weighted Warrior Set',
+      description: 'Take your training to the next level with weighted resistance',
+      image: 'https://images.unsplash.com/photo-1434754205268-ad3b5f549b11?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2Nzh8MHwxfHNlYXJjaHwzfHx3ZWlnaHQlMjB2ZXN0fGVufDB8fHxibGFja3wxNzQ4Mzc1ODM5fDA&ixlib=rb-4.1.0&q=85',
+      products: ['elite-weight-vest-10kg', 'premium-dip-belt', 'performance-training-tee'],
+      originalPrice: 244.97,
+      bundlePrice: 209.97,
+      level: 'elite'
+    }
+  ];
+
+  const getLevelColor = (level) => {
+    const colors = {
+      beginner: 'bg-green-100 text-green-800',
+      intermediate: 'bg-blue-100 text-blue-800',
+      advanced: 'bg-purple-100 text-purple-800',
+      elite: 'bg-red-100 text-red-800'
+    };
+    return colors[level] || 'bg-gray-100 text-gray-800';
+  };
+
+  return (
+    <div className="bg-white rounded-2xl shadow-lg p-6 mb-8">
+      <div className="text-center mb-8">
+        <h2 className="text-3xl font-bold text-gray-900 mb-4">Skill-Based Bundles</h2>
+        <p className="text-gray-600 text-lg">Curated equipment packages for your training level</p>
+      </div>
+      
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        {bundles.map((bundle) => (
+          <motion.div
+            key={bundle.id}
+            className="group cursor-pointer"
+            whileHover={{ y: -5 }}
+            onClick={() => onSelectBundle(bundle)}
+          >
+            <div className="bg-gradient-to-br from-gray-50 to-gray-100 rounded-xl overflow-hidden shadow-md group-hover:shadow-xl transition-all duration-300">
+              <div className="relative h-48 overflow-hidden">
+                <img 
+                  src={bundle.image} 
+                  alt={bundle.name}
+                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                />
+                <div className="absolute top-3 right-3">
+                  <span className={`text-xs px-2 py-1 rounded-full font-semibold capitalize ${getLevelColor(bundle.level)}`}>
+                    {bundle.level}
+                  </span>
+                </div>
+                <div className="absolute bottom-3 left-3 bg-emerald-500 text-white px-3 py-1 rounded-full text-xs font-semibold">
+                  Save ${(bundle.originalPrice - bundle.bundlePrice).toFixed(2)}
+                </div>
+              </div>
+              
+              <div className="p-6">
+                <h3 className="font-bold text-lg text-gray-900 mb-2">{bundle.name}</h3>
+                <p className="text-sm text-gray-600 mb-4">{bundle.description}</p>
+                
+                <div className="flex items-center justify-between mb-3">
+                  <div className="flex items-center gap-2">
+                    <span className="text-lg font-bold text-emerald-600">${bundle.bundlePrice}</span>
+                    <span className="text-sm text-gray-500 line-through">${bundle.originalPrice}</span>
+                  </div>
+                  <span className="text-xs text-gray-500">{bundle.products.length} items</span>
+                </div>
+                
+                <button className="w-full bg-emerald-500 text-white py-2 rounded-lg font-semibold hover:bg-emerald-600 transition-colors">
+                  View Bundle
+                </button>
+              </div>
+            </div>
+          </motion.div>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+// Enhanced Shop Header Component
+const ShopHeader = ({ searchQuery, setSearchQuery, viewMode, setViewMode, selectedCategory, setSelectedCategory, subcategory, setSubcategory, onToggleFilters, filtersOpen }) => {
+  return (
+    <div className="space-y-6">
+      {/* Hero Banner */}
+      <div className="relative h-64 md:h-80 rounded-2xl overflow-hidden">
+        <img 
+          src="https://images.pexels.com/photos/7671467/pexels-photo-7671467.jpeg"
+          alt="Shop Hero"
+          className="w-full h-full object-cover"
+        />
+        <div className="absolute inset-0 bg-gradient-to-r from-black/70 to-black/30 flex items-center">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
+            <div className="max-w-lg text-white">
+              <motion.h1 
+                className="text-4xl md:text-6xl font-bold mb-4"
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8 }}
+              >
+                Premium Calisthenics Gear
+              </motion.h1>
+              <motion.p 
+                className="text-lg md:text-xl mb-6 text-gray-200"
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, delay: 0.2 }}
+              >
+                Transform your training with professional equipment designed by athletes, for athletes.
+              </motion.p>
+              <motion.button 
+                className="bg-emerald-500 text-white px-8 py-3 rounded-lg font-semibold hover:bg-emerald-600 transition-all duration-300 shadow-lg hover:shadow-xl"
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, delay: 0.4 }}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                Explore Collection
+              </motion.button>
+            </div>
+          </div>
         </div>
-        
-        {/* View Mode Toggle */}
-        <div className="flex bg-gray-100 rounded-lg p-1">
-          <button
-            onClick={() => setViewMode('grid')}
-            className={`p-2 rounded-md transition-colors ${
-              viewMode === 'grid' ? 'bg-white shadow-sm' : ''
-            }`}
-          >
-            <Grid size={20} />
-          </button>
-          <button
-            onClick={() => setViewMode('list')}
-            className={`p-2 rounded-md transition-colors ${
-              viewMode === 'list' ? 'bg-white shadow-sm' : ''
-            }`}
-          >
-            <List size={20} />
-          </button>
+      </div>
+
+      {/* Search and Controls */}
+      <div className="bg-white rounded-2xl shadow-lg p-6">
+        <div className="flex flex-col lg:flex-row gap-4 items-center justify-between">
+          {/* Search Bar */}
+          <div className="relative flex-1 max-w-md">
+            <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
+            <input
+              type="text"
+              placeholder="Search products..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="w-full pl-12 pr-4 py-3 border-2 border-gray-200 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all duration-200"
+            />
+          </div>
+          
+          {/* Controls */}
+          <div className="flex items-center gap-4">
+            {/* Filters Toggle */}
+            <button
+              onClick={onToggleFilters}
+              className="flex items-center gap-2 px-4 py-2 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors"
+            >
+              <Filter size={20} />
+              <span className="hidden sm:inline">Filters</span>
+            </button>
+            
+            {/* View Mode Toggle */}
+            <div className="flex bg-gray-100 rounded-lg p-1">
+              <button
+                onClick={() => setViewMode('grid')}
+                className={`p-2 rounded-md transition-colors ${
+                  viewMode === 'grid' ? 'bg-white shadow-sm text-emerald-600' : 'text-gray-600'
+                }`}
+              >
+                <Grid size={20} />
+              </button>
+              <button
+                onClick={() => setViewMode('list')}
+                className={`p-2 rounded-md transition-colors ${
+                  viewMode === 'list' ? 'bg-white shadow-sm text-emerald-600' : 'text-gray-600'
+                }`}
+              >
+                <List size={20} />
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     </div>
