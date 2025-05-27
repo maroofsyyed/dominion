@@ -276,7 +276,7 @@ function App() {
         <div className="grid lg:grid-cols-2 gap-8 mb-12">
           {/* University Community */}
           <div className="bg-gradient-to-br from-emerald-800/50 to-green-900/50 rounded-2xl border border-emerald-600/30 p-6">
-            <h3 className="text-2xl font-bold text-white mb-6">Harvard University</h3>
+            <h3 className="text-2xl font-bold text-white mb-6">Indian Institute of Technology, Bombay</h3>
             <div className="space-y-4">
               <div className="flex justify-between">
                 <span className="text-gray-300">Active Members:</span>
