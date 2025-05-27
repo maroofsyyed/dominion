@@ -4,7 +4,7 @@ import json
 from datetime import datetime
 
 class DominionAPITester:
-    def __init__(self, base_url="https://4315c815-b355-43f9-b74b-a9c0be4940a6.preview.emergentagent.com"):
+    def __init__(self, base_url="https://fb43bf25-ca2e-499e-aef6-6b0c6c96504b.preview.emergentagent.com"):
         self.base_url = base_url
         self.tests_run = 0
         self.tests_passed = 0
