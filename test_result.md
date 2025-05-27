@@ -244,8 +244,10 @@ metadata:
 test_plan:
   current_focus:
     - "Product Seeding"
-  stuck_tasks: 
-    - "Product Seeding"
+    - "Get All Products"
+    - "Get Featured Products"
+    - "Get Products by Category"
+  stuck_tasks: []
   test_all: false
   test_priority: "high_first"
 
