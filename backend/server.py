@@ -132,6 +132,79 @@ async def get_status_checks():
     status_checks = await db.status_checks.find().to_list(1000)
     return [StatusCheck(**status_check) for status_check in status_checks]
 
+# Product API Endpoints
+
+@api_router.post("/products", response_model=Product)
+async def create_product(product_data: ProductCreate):
+    """Create a new product"""
+    product_dict = product_data.dict()
+    product_obj = Product(**product_dict)
+    result = await db.products.insert_one(product_obj.dict())
+    return product_obj
+
+@api_router.get("/products", response_model=List[Product])
+async def get_products(
+    category: Optional[ProductCategory] = None,
+    status: Optional[ProductStatus] = None,
+    skip: int = 0,
+    limit: int = 100
+):
+    """Get all products with optional filtering"""
+    filter_dict = {}
+    if category:
+        filter_dict["category"] = category
+    if status:
+        filter_dict["status"] = status
+    
+    products = await db.products.find(filter_dict).skip(skip).limit(limit).to_list(limit)
+    return [Product(**product) for product in products]
+
+@api_router.get("/products/{product_id}", response_model=Product)
+async def get_product(product_id: str):
+    """Get a specific product by ID"""
+    product = await db.products.find_one({"id": product_id})
+    if not product:
+        raise HTTPException(status_code=404, detail="Product not found")
+    return Product(**product)
+
+@api_router.put("/products/{product_id}", response_model=Product)
+async def update_product(product_id: str, product_update: ProductUpdate):
+    """Update a product"""
+    product = await db.products.find_one({"id": product_id})
+    if not product:
+        raise HTTPException(status_code=404, detail="Product not found")
+    
+    update_dict = {k: v for k, v in product_update.dict().items() if v is not None}
+    update_dict["updated_at"] = datetime.utcnow()
+    
+    await db.products.update_one({"id": product_id}, {"$set": update_dict})
+    
+    updated_product = await db.products.find_one({"id": product_id})
+    return Product(**updated_product)
+
+@api_router.delete("/products/{product_id}")
+async def delete_product(product_id: str):
+    """Delete a product"""
+    result = await db.products.delete_one({"id": product_id})
+    if result.deleted_count == 0:
+        raise HTTPException(status_code=404, detail="Product not found")
+    return {"message": "Product deleted successfully"}
+
+@api_router.get("/products/category/{category}", response_model=List[Product])
+async def get_products_by_category(category: ProductCategory):
+    """Get all products in a specific category"""
+    products = await db.products.find({"category": category, "status": "active"}).to_list(1000)
+    return [Product(**product) for product in products]
+
+@api_router.get("/products/featured", response_model=List[Product])
+async def get_featured_products(limit: int = 6):
+    """Get featured products (high rating, active status)"""
+    products = await db.products.find({
+        "status": "active", 
+        "rating": {"$gte": 4.0}
+    }).sort("rating", -1).limit(limit).to_list(limit)
+    return [Product(**product) for product in products]
+
 # Include the router in the main app
 app.include_router(api_router)
 
