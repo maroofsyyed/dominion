@@ -41,7 +41,7 @@ function App() {
   };
 
   const mockLeaderboard = [
-    { rank: 1, name: 'Maroof Singh', university: 'Indian Institute of Technology, Bombay', points: 5420, city: 'Mumbai' },
+    { rank: 1, name: 'Maroof Akhtar', university: 'Indian Institute of Technology, Bombay', points: 5420, city: 'Mumbai' },
     { rank: 2, name: 'Vishal Sharma', university: 'Indian Institute of Technology, Delhi', points: 5180, city: 'Mumbai' },
     { rank: 3, name: 'Aryan Patel', university: 'Indian Institute of Technology, Kanpur', points: 4950, city: 'Mumbai' },
     { rank: 4, name: 'Anish Kumar', university: 'Indian Institute of Technology, Roorkee', points: 4720, city: 'Mumbai' },
