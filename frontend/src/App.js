@@ -11,7 +11,13 @@ import {
   ExerciseDetail,
   ShopPage,
   ProductDetailPage,
-  ContactPage
+  ContactPage,
+  LeaderboardSection,
+  ShopSection,
+  ExerciseCategoryDetail,
+  getProgressData,
+  isExerciseUnlocked,
+  getMockUserProgress
 } from './components';
 import { 
   RadialBarChart, 
@@ -25,7 +31,7 @@ import {
   Tooltip 
 } from 'recharts';
 import { motion } from 'framer-motion';
-import { exerciseCategories, getExercisesByCategory, mockUserProgress } from './data/exercises';
+import { exerciseCategories, getExercisesByCategory, getExerciseById } from './data/exercises';
 
 function App() {
   const [activeSection, setActiveSection] = useState('home');
