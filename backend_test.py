@@ -467,7 +467,11 @@ def main():
     
     # 2. Test product seeding
     print("\n=== Testing Product Seeding ===")
-    tester.test_seed_products()
+    seed_success, _ = tester.test_seed_products()
+    
+    # If seeding failed or we don't have enough products, seed multiple products manually
+    if not seed_success or tester.tests_passed < tester.tests_run:
+        tester.seed_multiple_products()
     
     # 3. Test product retrieval endpoints
     print("\n=== Testing Product Retrieval Endpoints ===")
