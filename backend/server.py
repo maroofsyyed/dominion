@@ -226,6 +226,7 @@ async def seed_products():
             "id": "premium-resistance-bands",
             "name": "Premium Resistance Bands Set",
             "description": "Professional resistance training tools with multiple resistance levels. Perfect for assisted training and progressive skill development.",
+            "long_description": "Our Premium Resistance Bands Set is designed for serious athletes looking to enhance their calisthenics training. These professional-grade bands provide variable resistance for assisted movements, skill progression, and rehabilitation. The set includes four different resistance levels to accommodate all training needs, from beginners to advanced athletes.",
             "price": 39.99,
             "discount_price": 32.99,
             "category": "equipment",
@@ -238,11 +239,18 @@ async def seed_products():
                 "https://images.pexels.com/photos/7672096/pexels-photo-7672096.jpeg",
                 "https://images.pexels.com/photos/6091649/pexels-photo-6091649.jpeg"
             ],
+            "assets_3d": {
+                "model_url": "https://example.com/models/resistance-bands.glb",
+                "texture_urls": ["https://example.com/textures/resistance-bands-1.jpg"],
+                "preview_image": "https://images.pexels.com/photos/7672096/pexels-photo-7672096.jpeg"
+            },
             "specifications": {
                 "material": "100% Natural latex",
                 "resistance_levels": "Light, Medium, Heavy, Extra Heavy",
                 "includes": "4 bands, door anchor, handles, carry bag"
             },
+            "features": ["Multiple resistance levels", "Door anchor included", "Portable design"],
+            "tags": ["resistance", "training", "portable"],
             "benefits": ["Assisted muscle-ups", "Pull-up progression", "Portable training"],
             "prerequisites": [],
             "bundle_suggestions": ["wrist-wraps-performance", "liquid-chalk-pro"]
