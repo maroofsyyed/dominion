@@ -324,10 +324,10 @@ function App() {
           <h3 className="text-2xl font-bold text-white mb-6">Recent Community Activity</h3>
           <div className="space-y-4">
             {[
-              { user: "Alex M.", action: "unlocked Front Lever", time: "2 hours ago", university: "MIT" },
-              { user: "Sarah K.", action: "completed 50 push-ups challenge", time: "4 hours ago", university: "Harvard" },
-              { user: "Mike R.", action: "achieved new handstand PR", time: "6 hours ago", university: "BU" },
-              { user: "Emma T.", action: "joined Boston meetup group", time: "1 day ago", university: "Northeastern" }
+              { user: "Arjun M.", action: "unlocked Front Lever", time: "2 hours ago", university: "IIT Bombay" },
+              { user: "Priya K.", action: "completed 50 push-ups challenge", time: "4 hours ago", university: "IIT Delhi" },
+              { user: "Rohan R.", action: "achieved new handstand PR", time: "6 hours ago", university: "IIT Kanpur" },
+              { user: "Sneha T.", action: "joined Mumbai meetup group", time: "1 day ago", university: "IIT Roorkee" }
             ].map((activity, index) => (
               <motion.div 
                 key={index} 
