@@ -298,7 +298,7 @@ function App() {
 
           {/* City Community */}
           <div className="bg-gradient-to-br from-green-800/50 to-emerald-900/50 rounded-2xl border border-emerald-600/30 p-6">
-            <h3 className="text-2xl font-bold text-white mb-6">Boston, MA</h3>
+            <h3 className="text-2xl font-bold text-white mb-6">Mumbai, Maharashtra</h3>
             <div className="space-y-4">
               <div className="flex justify-between">
                 <span className="text-gray-300">Active Athletes:</span>
@@ -310,7 +310,7 @@ function App() {
               </div>
               <div className="flex justify-between">
                 <span className="text-gray-300">Location:</span>
-                <span className="text-emerald-400 font-semibold">Boston Common</span>
+                <span className="text-emerald-400 font-semibold">Marine Drive</span>
               </div>
               <button className="w-full bg-gradient-to-r from-emerald-500 to-green-600 text-white py-3 rounded-lg font-semibold hover:from-emerald-600 hover:to-green-700 transition-all">
                 Join City Group
