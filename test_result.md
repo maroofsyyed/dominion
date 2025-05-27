@@ -153,15 +153,18 @@ backend:
 
   - task: "Get Featured Products"
     implemented: true
-    working: false
+    working: true
     file: "/app/backend/server.py"
-    stuck_count: 1
+    stuck_count: 0
     priority: "medium"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
       - working: false
         agent: "testing"
         comment: "Featured products endpoint (/api/products/featured) returns 404 error. This appears to be a routing issue where FastAPI is interpreting 'featured' as a category parameter for the /products/category/{category} route. The route ordering in the code needs to be adjusted."
+      - working: true
+        agent: "testing"
+        comment: "Fixed the featured products endpoint by moving the route definition before the product ID route. The endpoint now correctly returns featured products with rating >= 4.0."
 
   - task: "Get Products by Category"
     implemented: true
