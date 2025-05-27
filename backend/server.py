@@ -205,6 +205,277 @@ async def get_featured_products(limit: int = 6):
     }).sort("rating", -1).limit(limit).to_list(limit)
     return [Product(**product) for product in products]
 
+@api_router.post("/products/seed")
+async def seed_products():
+    """Seed the database with sample products"""
+    # Check if products already exist
+    existing_count = await db.products.count_documents({})
+    if existing_count > 0:
+        return {"message": f"Products already exist ({existing_count} products). Skipping seed."}
+    
+    sample_products = [
+        {
+            "name": "Professional Gymnastic Rings",
+            "description": "Premium wooden gymnastic rings with adjustable straps",
+            "long_description": "Professional-grade wooden gymnastic rings crafted from high-quality birch wood. Perfect for building upper body strength, developing core stability, and mastering advanced calisthenics movements. Includes heavy-duty cam buckle straps rated for 2000 lbs.",
+            "category": "equipment",
+            "price": 89.99,
+            "discount_price": 69.99,
+            "images": [
+                "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b",
+                "https://images.unsplash.com/photo-1544384425-4bdeeb9fe3a0",
+                "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b"
+            ],
+            "assets_3d": {
+                "model_url": "https://cdn.shopify.com/s/files/1/models/gymnastic-rings.glb",
+                "texture_urls": ["https://cdn.shopify.com/textures/wood-rings.jpg"],
+                "preview_image": "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b"
+            },
+            "specifications": {
+                "dimensions": "9.5\" diameter rings",
+                "weight": "3.2 lbs total",
+                "material": "Birch wood rings, nylon straps",
+                "color_options": ["Natural Wood", "Black Stained"],
+                "additional_specs": {
+                    "strap_length": "15 feet each",
+                    "weight_capacity": "2000 lbs",
+                    "ring_thickness": "1.25 inches"
+                }
+            },
+            "features": [
+                "Premium birch wood construction",
+                "Heavy-duty cam buckle straps",
+                "2000 lb weight capacity",
+                "15 ft adjustable straps",
+                "Non-slip grip surface",
+                "Professional competition grade"
+            ],
+            "tags": ["rings", "calisthenics", "upper-body", "professional"],
+            "stock_quantity": 50,
+            "status": "active",
+            "rating": 4.8,
+            "review_count": 342
+        },
+        {
+            "name": "Parallette Bars Set",
+            "description": "Sturdy steel parallette bars for L-sits, handstands, and push-ups",
+            "long_description": "Heavy-duty steel parallette bars designed for serious calisthenics training. Perfect for L-sits, handstand progressions, push-up variations, and core exercises. Non-slip foam grips and rubber feet provide stability and comfort during intense training sessions.",
+            "category": "equipment",
+            "price": 124.99,
+            "images": [
+                "https://images.unsplash.com/photo-1576013551627-0cc20b96c2a7",
+                "https://images.unsplash.com/photo-1541534741688-6078c6bfb5c5",
+                "https://images.unsplash.com/photo-1576013551627-0cc20b96c2a7"
+            ],
+            "assets_3d": {
+                "model_url": "https://cdn.shopify.com/s/files/1/models/parallette-bars.glb",
+                "texture_urls": ["https://cdn.shopify.com/textures/steel-foam.jpg"],
+                "preview_image": "https://images.unsplash.com/photo-1576013551627-0cc20b96c2a7"
+            },
+            "specifications": {
+                "dimensions": "12\" H x 24\" L x 6\" W",
+                "weight": "8 lbs per bar",
+                "material": "Steel frame, foam grips",
+                "color_options": ["Black", "Red", "Blue"],
+                "additional_specs": {
+                    "weight_capacity": "300 lbs per bar",
+                    "grip_diameter": "1.5 inches",
+                    "base_width": "24 inches"
+                }
+            },
+            "features": [
+                "Heavy-duty steel construction",
+                "Non-slip foam grips",
+                "Rubber feet for stability",
+                "300 lb weight capacity per bar",
+                "Perfect height for L-sits",
+                "Powder-coated finish"
+            ],
+            "tags": ["parallettes", "handstand", "l-sit", "push-ups"],
+            "stock_quantity": 25,
+            "status": "active",
+            "rating": 4.7,
+            "review_count": 156
+        },
+        {
+            "name": "Resistance Bands Set",
+            "description": "Complete set of resistance bands for strength training",
+            "long_description": "Professional resistance band set with 5 different resistance levels. Perfect for assisted pull-ups, stretching, rehabilitation, and strength training. Includes door anchor, ankle straps, and exercise guide with 30+ exercises.",
+            "category": "equipment",
+            "price": 49.99,
+            "discount_price": 34.99,
+            "images": [
+                "https://images.unsplash.com/photo-1544384425-4b80e5ca2dd4",
+                "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b",
+                "https://images.unsplash.com/photo-1544384425-4b80e5ca2dd4"
+            ],
+            "assets_3d": {
+                "model_url": "https://cdn.shopify.com/s/files/1/models/resistance-bands.glb",
+                "texture_urls": ["https://cdn.shopify.com/textures/rubber-bands.jpg"],
+                "preview_image": "https://images.unsplash.com/photo-1544384425-4b80e5ca2dd4"
+            },
+            "specifications": {
+                "dimensions": "48\" length bands",
+                "weight": "2.5 lbs total",
+                "material": "Natural latex rubber",
+                "color_options": ["Multi-color set"],
+                "additional_specs": {
+                    "resistance_levels": "10-50 lbs per band",
+                    "band_count": "5 bands",
+                    "max_resistance": "150 lbs combined"
+                }
+            },
+            "features": [
+                "5 resistance levels (10-50 lbs)",
+                "Natural latex construction",
+                "Door anchor included",
+                "Ankle straps and handles",
+                "Exercise guide with 30+ workouts",
+                "Portable and lightweight"
+            ],
+            "tags": ["resistance", "bands", "assisted", "stretching"],
+            "stock_quantity": 100,
+            "status": "active",
+            "rating": 4.5,
+            "review_count": 89
+        },
+        {
+            "name": "Creatine Monohydrate",
+            "description": "Pure creatine monohydrate for strength and power",
+            "long_description": "Pharmaceutical-grade creatine monohydrate powder to enhance strength, power, and muscle growth. Helps increase ATP production for explosive movements and faster recovery between sets. Unflavored, pure powder that mixes easily with any beverage.",
+            "category": "supplements",
+            "price": 29.99,
+            "images": [
+                "https://images.unsplash.com/photo-1593095948071-474c5cc2989d",
+                "https://images.unsplash.com/photo-1556909610-f3e23370c71f",
+                "https://images.unsplash.com/photo-1593095948071-474c5cc2989d"
+            ],
+            "assets_3d": {
+                "model_url": "https://cdn.shopify.com/s/files/1/models/supplement-bottle.glb",
+                "texture_urls": ["https://cdn.shopify.com/textures/white-bottle.jpg"],
+                "preview_image": "https://images.unsplash.com/photo-1593095948071-474c5cc2989d"
+            },
+            "specifications": {
+                "dimensions": "4\" H x 3\" diameter",
+                "weight": "1.2 lbs",
+                "material": "HDPE plastic bottle",
+                "color_options": ["White"],
+                "additional_specs": {
+                    "serving_size": "5g",
+                    "servings_per_container": "60",
+                    "total_weight": "300g"
+                }
+            },
+            "features": [
+                "Pharmaceutical-grade purity",
+                "Unflavored powder",
+                "60 servings per container",
+                "Micronized for better absorption",
+                "Third-party tested",
+                "No artificial additives"
+            ],
+            "tags": ["creatine", "strength", "power", "supplement"],
+            "stock_quantity": 75,
+            "status": "active",
+            "rating": 4.6,
+            "review_count": 234
+        },
+        {
+            "name": "Workout Grip Gloves",
+            "description": "Premium leather grip gloves for calisthenics training",
+            "long_description": "Professional-grade leather grip gloves designed specifically for calisthenics and gymnastic training. Features reinforced palm protection, wrist support, and breathable mesh backing. Perfect for pull-ups, muscle-ups, and ring work.",
+            "category": "accessories",
+            "price": 39.99,
+            "images": [
+                "https://images.unsplash.com/photo-1544966503-7cc5ac882d5e",
+                "https://images.unsplash.com/photo-1578662996442-48f60103fc96",
+                "https://images.unsplash.com/photo-1544966503-7cc5ac882d5e"
+            ],
+            "assets_3d": {
+                "model_url": "https://cdn.shopify.com/s/files/1/models/workout-gloves.glb",
+                "texture_urls": ["https://cdn.shopify.com/textures/leather-mesh.jpg"],
+                "preview_image": "https://images.unsplash.com/photo-1544966503-7cc5ac882d5e"
+            },
+            "specifications": {
+                "dimensions": "Various sizes (S-XL)",
+                "weight": "0.3 lbs per pair",
+                "material": "Leather palm, mesh backing",
+                "color_options": ["Black", "Brown"],
+                "additional_specs": {
+                    "palm_thickness": "3mm",
+                    "wrist_strap": "Adjustable velcro",
+                    "finger_style": "Half-finger design"
+                }
+            },
+            "features": [
+                "Premium leather palm protection",
+                "Breathable mesh backing",
+                "Adjustable wrist support",
+                "Half-finger design for grip",
+                "Reinforced stress points",
+                "Machine washable"
+            ],
+            "tags": ["gloves", "grip", "protection", "calisthenics"],
+            "stock_quantity": 40,
+            "status": "active",
+            "rating": 4.4,
+            "review_count": 67
+        },
+        {
+            "name": "Calisthenics Training Shirt",
+            "description": "Moisture-wicking performance shirt for intense workouts",
+            "long_description": "Premium athletic shirt designed for calisthenics training. Features moisture-wicking fabric technology, 4-way stretch for full range of motion, and motivational calisthenics graphics. Comfortable fit that moves with your body during the most challenging workouts.",
+            "category": "apparel",
+            "price": 34.99,
+            "images": [
+                "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab",
+                "https://images.unsplash.com/photo-1556821840-3a63f95609a7",
+                "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab"
+            ],
+            "assets_3d": {
+                "model_url": "https://cdn.shopify.com/s/files/1/models/workout-shirt.glb",
+                "texture_urls": ["https://cdn.shopify.com/textures/athletic-fabric.jpg"],
+                "preview_image": "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab"
+            },
+            "specifications": {
+                "dimensions": "Various sizes (XS-XXL)",
+                "weight": "0.4 lbs",
+                "material": "Polyester-spandex blend",
+                "color_options": ["Black", "Grey", "Navy", "Forest Green"],
+                "additional_specs": {
+                    "fabric_blend": "88% polyester, 12% spandex",
+                    "fit_type": "Athletic fit",
+                    "sleeve_type": "Short sleeve"
+                }
+            },
+            "features": [
+                "Moisture-wicking technology",
+                "4-way stretch fabric",
+                "Motivational calisthenics design",
+                "Tagless comfort",
+                "Anti-odor treatment",
+                "Machine washable"
+            ],
+            "tags": ["shirt", "apparel", "moisture-wicking", "training"],
+            "stock_quantity": 60,
+            "status": "active",
+            "rating": 4.3,
+            "review_count": 45
+        }
+    ]
+    
+    # Insert sample products
+    inserted_products = []
+    for product_data in sample_products:
+        product_obj = Product(**product_data)
+        await db.products.insert_one(product_obj.dict())
+        inserted_products.append(product_obj.name)
+    
+    return {
+        "message": f"Successfully seeded {len(inserted_products)} products",
+        "products": inserted_products
+    }
+
 # Include the router in the main app
 app.include_router(api_router)
 
