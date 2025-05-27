@@ -1,6 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef, Suspense } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate, useParams } from 'react-router-dom';
+import { Canvas, useFrame } from '@react-three/fiber';
+import { OrbitControls, useGLTF, Environment, ContactShadows, PresentationControls } from '@react-three/drei';
 import { 
   User, 
   MapPin, 
@@ -29,7 +31,18 @@ import {
   RotateCcw,
   Home,
   ArrowLeft,
-  ExternalLink
+  ExternalLink,
+  ShoppingCart,
+  Heart,
+  Filter,
+  Search,
+  Grid,
+  List,
+  Package,
+  ShoppingBag,
+  Minus,
+  Plus,
+  Eye
 } from 'lucide-react';
 import { RadialBarChart, RadialBar, PieChart, Pie, Cell, ResponsiveContainer, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip } from 'recharts';
 import { 
