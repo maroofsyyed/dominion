@@ -10,7 +10,8 @@ import {
   SkillTree,
   ExerciseDetail,
   ShopPage,
-  ProductDetailPage
+  ProductDetailPage,
+  ContactPage
 } from './components';
 import { 
   RadialBarChart, 
