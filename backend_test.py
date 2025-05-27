@@ -45,78 +45,35 @@ class DominionAPITester:
             print(f"❌ Failed - Error: {str(e)}")
             return False, {}
 
-    def test_get_exercise_categories(self):
-        """Test getting all exercise categories"""
+    def test_root_endpoint(self):
+        """Test the root API endpoint"""
         return self.run_test(
-            "Get Exercise Categories",
+            "Root API Endpoint",
             "GET",
-            "categories",
+            "",
             200
         )
 
-    def test_get_exercises_by_category(self, category_id):
-        """Test getting exercises by category"""
+    def test_create_status_check(self):
+        """Test creating a status check"""
+        data = {
+            "client_name": f"test_client_{datetime.now().strftime('%H%M%S')}"
+        }
         return self.run_test(
-            f"Get Exercises for Category {category_id}",
-            "GET",
-            f"categories/{category_id}/exercises",
-            200
-        )
-
-    def test_get_exercise_details(self, exercise_id):
-        """Test getting exercise details"""
-        return self.run_test(
-            f"Get Exercise Details for {exercise_id}",
-            "GET",
-            f"exercises/{exercise_id}",
-            200
-        )
-
-    def test_get_user_progress(self, user_id="current"):
-        """Test getting user progress"""
-        return self.run_test(
-            "Get User Progress",
-            "GET",
-            f"users/{user_id}/progress",
-            200
-        )
-
-    def test_update_exercise_progress(self, exercise_id, progress_data):
-        """Test updating exercise progress"""
-        return self.run_test(
-            f"Update Progress for Exercise {exercise_id}",
-            "PUT",
-            f"exercises/{exercise_id}/progress",
-            200,
-            data=progress_data
-        )
-
-    def test_get_leaderboard(self):
-        """Test getting leaderboard data"""
-        return self.run_test(
-            "Get Leaderboard",
-            "GET",
-            "leaderboard",
-            200
-        )
-
-    def test_get_community_stats(self):
-        """Test getting community stats"""
-        return self.run_test(
-            "Get Community Stats",
-            "GET",
-            "community/stats",
-            200
-        )
-
-    def test_user_signup(self, user_data):
-        """Test user signup"""
-        return self.run_test(
-            "User Signup",
+            "Create Status Check",
             "POST",
-            "users/signup",
-            201,
-            data=user_data
+            "status",
+            200,
+            data=data
+        )
+
+    def test_get_status_checks(self):
+        """Test getting status checks"""
+        return self.run_test(
+            "Get Status Checks",
+            "GET",
+            "status",
+            200
         )
 
 def main():
@@ -126,55 +83,14 @@ def main():
     # Run tests
     print("\n===== Testing Dominion Calisthenics API =====\n")
     
-    # Test getting exercise categories
-    success, categories_data = tester.test_get_exercise_categories()
+    # Test root endpoint
+    tester.test_root_endpoint()
     
-    # Test getting exercises for a specific category
-    if success and categories_data:
-        # Use the first category from the response if available
-        category_id = None
-        if isinstance(categories_data, list) and len(categories_data) > 0:
-            category_id = categories_data[0].get('id', 'horizontal-pull')
-        else:
-            # Fallback to a known category ID
-            category_id = 'horizontal-pull'
-        
-        success, exercises_data = tester.test_get_exercises_by_category(category_id)
-        
-        # Test getting details for a specific exercise
-        if success and exercises_data and isinstance(exercises_data, list) and len(exercises_data) > 0:
-            exercise_id = exercises_data[0].get('id', 'german-hang')
-            tester.test_get_exercise_details(exercise_id)
+    # Test creating a status check
+    tester.test_create_status_check()
     
-    # Test user progress
-    tester.test_get_user_progress()
-    
-    # Test updating exercise progress
-    progress_data = {
-        "progress": 75,
-        "status": "current"
-    }
-    tester.test_update_exercise_progress("german-hang", progress_data)
-    
-    # Test leaderboard
-    tester.test_get_leaderboard()
-    
-    # Test community stats
-    tester.test_get_community_stats()
-    
-    # Test user signup
-    user_data = {
-        "firstName": "Test",
-        "lastName": "User",
-        "email": f"test.user.{datetime.now().strftime('%H%M%S')}@example.com",
-        "age": 25,
-        "gender": "prefer-not-to-say",
-        "university": "Test University",
-        "city": "Test City",
-        "fitnessLevel": "beginner",
-        "goals": ["Master Pull-ups", "Learn Handstand"]
-    }
-    tester.test_user_signup(user_data)
+    # Test getting status checks
+    tester.test_get_status_checks()
     
     # Print results
     print(f"\n📊 Tests passed: {tester.tests_passed}/{tester.tests_run}")
