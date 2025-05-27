@@ -375,6 +375,8 @@ function App() {
           <Route path="/progress" element={<ProgressSection />} />
           <Route path="/community" element={<CommunityMainSection />} />
           <Route path="/leaderboard" element={<LeaderboardSection />} />
+          <Route path="/shop" element={<ShopPage />} />
+          <Route path="/shop/product/:productId" element={<ProductDetailPage />} />
         </Routes>
         
         <SignupModal 
