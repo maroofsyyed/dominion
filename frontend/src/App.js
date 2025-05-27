@@ -378,6 +378,7 @@ function App() {
           <Route path="/leaderboard" element={<LeaderboardSection />} />
           <Route path="/shop" element={<ShopPage />} />
           <Route path="/shop/product/:productId" element={<ProductDetailPage />} />
+          <Route path="/contact" element={<ContactPage />} />
         </Routes>
         
         <SignupModal 
