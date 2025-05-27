@@ -2374,8 +2374,7 @@ export const ContactPage = () => {
                 </div>
                 <div>
                   <h3 className="font-semibold text-emerald-900">Phone</h3>
-                  <p className="text-gray-600">+91 98765 43210</p>
-                  <p className="text-gray-600">+91 87654 32109</p>
+                  <p className="text-gray-600">+91 8504848159</p>
                 </div>
               </div>
 
@@ -2385,8 +2384,7 @@ export const ContactPage = () => {
                 </div>
                 <div>
                   <h3 className="font-semibold text-emerald-900">Email</h3>
-                  <p className="text-gray-600">info@dominion.fit</p>
-                  <p className="text-gray-600">support@dominion.fit</p>
+                  <p className="text-gray-600">maroof@dominionvault.com</p>
                 </div>
               </div>
 
@@ -2397,9 +2395,9 @@ export const ContactPage = () => {
                 <div>
                   <h3 className="font-semibold text-emerald-900">Address</h3>
                   <p className="text-gray-600">
-                    Marine Drive Fitness Center<br />
-                    Nariman Point, Mumbai 400021<br />
-                    Maharashtra, India
+                    Upcoming Location<br />
+                    Mumbai, Maharashtra<br />
+                    India
                   </p>
                 </div>
               </div>
