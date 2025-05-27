@@ -452,6 +452,287 @@ class CalisthenicsProductTester:
             print(f"✅ Product has benefits: {', '.join(product['benefits'])}")
         else:
             print("❌ Product is missing benefits")
+            
+    def seed_multiple_products(self):
+        """Seed multiple products to ensure a comprehensive catalog"""
+        print("\n🔍 Seeding multiple products to build catalog...")
+        
+        # Create a list of valid products with all required fields
+        products = [
+            {
+                "name": "Premium Parallettes Set",
+                "description": "Complete parallettes collection for comprehensive training",
+                "long_description": "Our Premium Parallettes Set includes Max (30cm), Pro (10cm), and Active (compact) variants for all your training needs. Perfect for handstands, L-sits, and more.",
+                "category": "equipment",
+                "subcategory": "parallettes",
+                "price": 189.99,
+                "discount_price": 159.99,
+                "images": ["https://example.com/parallettes1.jpg", "https://example.com/parallettes2.jpg"],
+                "assets_3d": {
+                    "model_url": "https://example.com/parallettes.glb",
+                    "texture_urls": ["https://example.com/parallettes-texture.jpg"],
+                    "preview_image": "https://example.com/parallettes-preview.jpg"
+                },
+                "specifications": {
+                    "material": "Beech wood handles, steel base",
+                    "handle_diameter": "40mm",
+                    "weight_capacity": "500kg per pair"
+                },
+                "features": ["Multiple heights", "Stable base", "Premium materials"],
+                "tags": ["parallettes", "handstand", "training"],
+                "stock_quantity": 34,
+                "status": "active",
+                "rating": 4.8,
+                "review_count": 124,
+                "skill_levels": ["Beginner", "Intermediate", "Advanced"],
+                "prerequisites": [],
+                "benefits": ["Improved strength", "Better balance", "Enhanced coordination"]
+            },
+            {
+                "name": "Professional Workout Rings",
+                "description": "Olympic standard birch wood rings for advanced training",
+                "long_description": "Our Professional Workout Rings are made from Olympic standard birch wood with precision straps for advanced upper body development and gymnastic movements.",
+                "category": "equipment",
+                "subcategory": "suspension-training",
+                "price": 89.99,
+                "discount_price": 74.99,
+                "images": ["https://example.com/rings1.jpg", "https://example.com/rings2.jpg"],
+                "assets_3d": {
+                    "model_url": "https://example.com/rings.glb",
+                    "texture_urls": ["https://example.com/rings-texture.jpg"],
+                    "preview_image": "https://example.com/rings-preview.jpg"
+                },
+                "specifications": {
+                    "material": "Birch wood rings",
+                    "diameter": "18cm, thickness 2.8cm",
+                    "capacity": "300kg per side"
+                },
+                "features": ["Olympic standard", "Adjustable straps", "Premium wood"],
+                "tags": ["rings", "gymnastics", "training"],
+                "stock_quantity": 41,
+                "status": "active",
+                "rating": 4.9,
+                "review_count": 87,
+                "skill_levels": ["Intermediate", "Advanced"],
+                "prerequisites": ["Basic upper body strength"],
+                "benefits": ["Increased upper body strength", "Improved stability", "Better muscle control"]
+            },
+            {
+                "name": "Elite Weight Vest (10kg)",
+                "description": "Adjustable weight vest with removable weights",
+                "long_description": "Our Elite Weight Vest features adjustable weight with removable 1kg iron blocks. The compact, body-hugging design prevents weight shifting during movement.",
+                "category": "equipment",
+                "subcategory": "weighted-training",
+                "price": 149.99,
+                "discount_price": 129.99,
+                "images": ["https://example.com/vest1.jpg", "https://example.com/vest2.jpg"],
+                "assets_3d": {
+                    "model_url": "https://example.com/vest.glb",
+                    "texture_urls": ["https://example.com/vest-texture.jpg"],
+                    "preview_image": "https://example.com/vest-preview.jpg"
+                },
+                "specifications": {
+                    "weight": "10kg adjustable",
+                    "increments": "1kg removable blocks",
+                    "design": "Body-hugging fit"
+                },
+                "features": ["Adjustable weight", "Comfortable fit", "Durable construction"],
+                "tags": ["weight vest", "weighted training", "progressive overload"],
+                "stock_quantity": 18,
+                "status": "active",
+                "rating": 4.7,
+                "review_count": 56,
+                "skill_levels": ["Intermediate", "Advanced"],
+                "prerequisites": ["Basic strength foundation"],
+                "benefits": ["Progressive overload", "Increased strength", "Enhanced endurance"]
+            },
+            {
+                "name": "Premium Liquid Chalk",
+                "description": "Professional-grade liquid chalk for superior grip",
+                "long_description": "Our Premium Liquid Chalk features a fast-drying, dust-free formula for superior grip enhancement during all training sessions.",
+                "category": "accessories",
+                "subcategory": "grip-enhancement",
+                "price": 16.99,
+                "images": ["https://example.com/chalk1.jpg", "https://example.com/chalk2.jpg"],
+                "assets_3d": {
+                    "model_url": "https://example.com/chalk.glb",
+                    "texture_urls": ["https://example.com/chalk-texture.jpg"],
+                    "preview_image": "https://example.com/chalk-preview.jpg"
+                },
+                "specifications": {
+                    "volume": "200ml",
+                    "formula": "Fast-drying, dust-free",
+                    "scent": "Pleasant, non-intrusive"
+                },
+                "features": ["Fast-drying", "Long-lasting", "Easy application"],
+                "tags": ["chalk", "grip", "accessories"],
+                "stock_quantity": 156,
+                "status": "active",
+                "rating": 4.6,
+                "review_count": 203,
+                "skill_levels": ["Beginner", "Intermediate", "Advanced"],
+                "prerequisites": [],
+                "benefits": ["Improved grip", "Reduced slipping", "Better performance"]
+            },
+            {
+                "name": "Performance Training T-Shirt",
+                "description": "High-performance athletic t-shirt for intense training",
+                "long_description": "Our Performance Training T-Shirt features raglan sleeves and moisture-wicking technology for comfort during intense training sessions.",
+                "category": "apparel",
+                "subcategory": "performance-wear",
+                "price": 34.99,
+                "images": ["https://example.com/tshirt1.jpg", "https://example.com/tshirt2.jpg"],
+                "assets_3d": {
+                    "model_url": "https://example.com/tshirt.glb",
+                    "texture_urls": ["https://example.com/tshirt-texture.jpg"],
+                    "preview_image": "https://example.com/tshirt-preview.jpg"
+                },
+                "specifications": {
+                    "material": "90% Polyester, 10% Spandex",
+                    "fit": "Athletic raglan sleeves",
+                    "technology": "Moisture-wicking"
+                },
+                "features": ["Moisture-wicking", "Breathable", "Athletic fit"],
+                "tags": ["apparel", "t-shirt", "training wear"],
+                "stock_quantity": 145,
+                "status": "active",
+                "rating": 4.5,
+                "review_count": 178,
+                "skill_levels": ["Beginner", "Intermediate", "Advanced"],
+                "prerequisites": [],
+                "benefits": ["Comfort during training", "Moisture management", "Freedom of movement"]
+            },
+            {
+                "name": "Competition Tank Top",
+                "description": "Lightweight competition tank top for maximum mobility",
+                "long_description": "Our Competition Tank Top is designed for serious athletes who need maximum mobility and comfort during competitions and intense training sessions.",
+                "category": "apparel",
+                "subcategory": "competition-wear",
+                "price": 29.99,
+                "images": ["https://example.com/tank1.jpg", "https://example.com/tank2.jpg"],
+                "assets_3d": {
+                    "model_url": "https://example.com/tank.glb",
+                    "texture_urls": ["https://example.com/tank-texture.jpg"],
+                    "preview_image": "https://example.com/tank-preview.jpg"
+                },
+                "specifications": {
+                    "material": "95% Polyester, 5% Elastane",
+                    "fit": "Athletic, streamlined",
+                    "technology": "Quick-dry, anti-odor"
+                },
+                "features": ["Lightweight", "Quick-drying", "Maximum mobility"],
+                "tags": ["apparel", "tank top", "competition wear"],
+                "stock_quantity": 112,
+                "status": "active",
+                "rating": 4.7,
+                "review_count": 92,
+                "skill_levels": ["Intermediate", "Advanced"],
+                "prerequisites": [],
+                "benefits": ["Unrestricted movement", "Cooling during intense workouts", "Competition-ready design"]
+            },
+            {
+                "name": "Premium Training Hoodie",
+                "description": "Comfortable hoodie for pre and post-workout",
+                "long_description": "Our Premium Training Hoodie provides the perfect balance of comfort and functionality for pre and post-workout sessions or casual wear.",
+                "category": "apparel",
+                "subcategory": "lifestyle-wear",
+                "price": 59.99,
+                "images": ["https://example.com/hoodie1.jpg", "https://example.com/hoodie2.jpg"],
+                "assets_3d": {
+                    "model_url": "https://example.com/hoodie.glb",
+                    "texture_urls": ["https://example.com/hoodie-texture.jpg"],
+                    "preview_image": "https://example.com/hoodie-preview.jpg"
+                },
+                "specifications": {
+                    "material": "80% Cotton, 20% Polyester",
+                    "fit": "Regular, comfortable",
+                    "features": "Kangaroo pocket, adjustable hood"
+                },
+                "features": ["Comfortable", "Stylish", "Versatile"],
+                "tags": ["apparel", "hoodie", "lifestyle wear"],
+                "stock_quantity": 89,
+                "status": "active",
+                "rating": 4.8,
+                "review_count": 145,
+                "skill_levels": ["Beginner", "Intermediate", "Advanced"],
+                "prerequisites": [],
+                "benefits": ["Warmth during warm-up", "Comfort after training", "Stylish everyday wear"]
+            },
+            {
+                "name": "Advanced Resistance Bands Set",
+                "description": "Professional-grade resistance bands for advanced training",
+                "long_description": "Our Advanced Resistance Bands Set includes five bands with different resistance levels for comprehensive strength training and rehabilitation exercises.",
+                "category": "equipment",
+                "subcategory": "resistance-systems",
+                "price": 49.99,
+                "images": ["https://example.com/bands1.jpg", "https://example.com/bands2.jpg"],
+                "assets_3d": {
+                    "model_url": "https://example.com/bands.glb",
+                    "texture_urls": ["https://example.com/bands-texture.jpg"],
+                    "preview_image": "https://example.com/bands-preview.jpg"
+                },
+                "specifications": {
+                    "material": "Natural latex",
+                    "resistance_levels": "5 levels (10-50 lbs)",
+                    "length": "1.5m each"
+                },
+                "features": ["Multiple resistance levels", "Door anchor included", "Carrying case"],
+                "tags": ["resistance bands", "strength training", "portable equipment"],
+                "stock_quantity": 67,
+                "status": "active",
+                "rating": 4.6,
+                "review_count": 213,
+                "skill_levels": ["Beginner", "Intermediate", "Advanced"],
+                "prerequisites": [],
+                "benefits": ["Versatile strength training", "Joint-friendly resistance", "Portable workout solution"]
+            },
+            {
+                "name": "Wrist Support Wraps",
+                "description": "Professional wrist support for heavy training",
+                "long_description": "Our Wrist Support Wraps provide essential stability and protection during heavy lifting and intense calisthenics movements that stress the wrists.",
+                "category": "accessories",
+                "subcategory": "support-systems",
+                "price": 24.99,
+                "images": ["https://example.com/wrist1.jpg", "https://example.com/wrist2.jpg"],
+                "assets_3d": {
+                    "model_url": "https://example.com/wrist.glb",
+                    "texture_urls": ["https://example.com/wrist-texture.jpg"],
+                    "preview_image": "https://example.com/wrist-preview.jpg"
+                },
+                "specifications": {
+                    "material": "Heavy-duty cotton with elastic",
+                    "length": "50cm",
+                    "closure": "Velcro with thumb loop"
+                },
+                "features": ["Adjustable tightness", "Thumb loop for security", "Breathable material"],
+                "tags": ["wrist support", "protection", "heavy training"],
+                "stock_quantity": 124,
+                "status": "active",
+                "rating": 4.7,
+                "review_count": 167,
+                "skill_levels": ["Intermediate", "Advanced"],
+                "prerequisites": [],
+                "benefits": ["Wrist protection", "Increased stability", "Injury prevention"]
+            }
+        ]
+        
+        success_count = 0
+        for product in products:
+            success, data = self.run_test(
+                f"Create Product: {product['name']}",
+                "POST",
+                "products",
+                200,
+                data=product
+            )
+            if success:
+                success_count += 1
+                print(f"✅ Successfully created product: {data['name']}")
+            else:
+                print(f"❌ Failed to create product: {product['name']}")
+        
+        print(f"\n✅ Successfully created {success_count}/{len(products)} products")
+        return success_count == len(products)
 
 def main():
     # Setup
