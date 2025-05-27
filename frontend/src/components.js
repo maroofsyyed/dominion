@@ -2108,11 +2108,238 @@ export const isExerciseUnlocked = (exerciseId, userProgress) => {
 };
 
 export const getProgressData = (exercises, userProgress) => {
-  // Mock implementation
-  return {
-    completedExercises: 15,
-    totalExercises: 50,
-    skillsUnlocked: 8,
+  return exercises.map(exercise => ({
+    ...exercise,
+    unlocked: isExerciseUnlocked(exercise.id, userProgress)
+  }));
+};
+
+// Missing components that App.js imports
+export const HeroSection = () => {
+  return (
+    <section className="relative min-h-screen bg-gradient-to-br from-gray-900 via-emerald-900 to-gray-900 flex items-center justify-center overflow-hidden">
+      <div className="absolute inset-0 bg-[url('data:image/svg+xml,...')] opacity-10"></div>
+      <div className="relative z-10 text-center text-white px-6 max-w-5xl mx-auto">
+        <motion.h1 
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="text-5xl md:text-7xl font-bold mb-8 bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent"
+        >
+          Transform Your Body
+        </motion.h1>
+        <motion.p 
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2 }}
+          className="text-xl md:text-2xl mb-12 text-gray-300"
+        >
+          Join thousands of athletes mastering calisthenics through progressive training and community support
+        </motion.p>
+        <motion.div 
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.4 }}
+          className="space-x-6"
+        >
+          <button className="bg-emerald-600 hover:bg-emerald-700 text-white px-8 py-4 rounded-lg font-semibold transition-all duration-300 transform hover:scale-105">
+            Start Your Journey
+          </button>
+          <button className="border-2 border-emerald-600 text-emerald-400 hover:bg-emerald-600 hover:text-white px-8 py-4 rounded-lg font-semibold transition-all duration-300">
+            Explore Community
+          </button>
+        </motion.div>
+      </div>
+    </section>
+  );
+};
+
+export const SkillTree = ({ category, exercises, userProgress }) => {
+  return (
+    <div className="bg-gray-800 rounded-xl p-6">
+      <h3 className="text-2xl font-bold text-white mb-6">{category} Skill Tree</h3>
+      <div className="space-y-4">
+        {exercises.map((exercise, index) => {
+          const isUnlocked = isExerciseUnlocked(exercise.id, userProgress);
+          return (
+            <motion.div
+              key={exercise.id}
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: index * 0.1 }}
+              className={`p-4 rounded-lg border-2 ${
+                isUnlocked
+                  ? 'border-emerald-500 bg-emerald-500/10'
+                  : 'border-gray-600 bg-gray-700/50'
+              }`}
+            >
+              <div className="flex items-center justify-between">
+                <div>
+                  <h4 className={`font-semibold ${isUnlocked ? 'text-emerald-400' : 'text-gray-400'}`}>
+                    {exercise.name}
+                  </h4>
+                  <p className="text-sm text-gray-500">Level {exercise.level} • {exercise.category}</p>
+                </div>
+                <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
+                  isUnlocked ? 'bg-emerald-500 text-white' : 'bg-gray-600 text-gray-400'
+                }`}>
+                  {isUnlocked ? '✓' : '🔒'}
+                </div>
+              </div>
+            </motion.div>
+          );
+        })}
+      </div>
+    </div>
+  );
+};
+
+export const ExerciseDetail = ({ exercise, onBack }) => {
+  return (
+    <div className="bg-gray-800 rounded-xl p-8">
+      <button 
+        onClick={onBack}
+        className="mb-6 flex items-center text-emerald-400 hover:text-emerald-300 transition-colors"
+      >
+        ← Back to Categories
+      </button>
+      
+      <div className="mb-8">
+        <h1 className="text-4xl font-bold text-white mb-4">{exercise.name}</h1>
+        <div className="flex flex-wrap gap-4 mb-6">
+          <span className="bg-emerald-500/20 text-emerald-400 px-3 py-1 rounded-full text-sm">
+            Level {exercise.level}
+          </span>
+          <span className="bg-blue-500/20 text-blue-400 px-3 py-1 rounded-full text-sm">
+            {exercise.category}
+          </span>
+          <span className="bg-purple-500/20 text-purple-400 px-3 py-1 rounded-full text-sm">
+            {exercise.type}
+          </span>
+        </div>
+        <p className="text-gray-300 text-lg leading-relaxed">{exercise.description}</p>
+      </div>
+
+      <div className="grid md:grid-cols-2 gap-8">
+        <div>
+          <h3 className="text-2xl font-bold text-white mb-4">Prerequisites</h3>
+          <ul className="space-y-2">
+            {exercise.prerequisites.map((prereq, index) => (
+              <li key={index} className="text-gray-300 flex items-center">
+                <span className="w-2 h-2 bg-emerald-500 rounded-full mr-3"></span>
+                {prereq}
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        <div>
+          <h3 className="text-2xl font-bold text-white mb-4">Benefits</h3>
+          <ul className="space-y-2">
+            {exercise.benefits.map((benefit, index) => (
+              <li key={index} className="text-gray-300 flex items-center">
+                <span className="w-2 h-2 bg-emerald-500 rounded-full mr-3"></span>
+                {benefit}
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+
+      <div className="mt-8">
+        <h3 className="text-2xl font-bold text-white mb-4">Progressive Steps</h3>
+        <div className="space-y-3">
+          {exercise.progressionSteps.map((step, index) => (
+            <div key={index} className="bg-gray-700 rounded-lg p-4">
+              <h4 className="font-semibold text-emerald-400 mb-2">Step {index + 1}</h4>
+              <p className="text-gray-300">{step}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export const SignupModal = ({ isOpen, onClose }) => {
+  if (!isOpen) return null;
+
+  return (
+    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+      <motion.div
+        initial={{ opacity: 0, scale: 0.9 }}
+        animate={{ opacity: 1, scale: 1 }}
+        className="bg-gray-800 rounded-xl p-8 max-w-md w-full"
+      >
+        <div className="flex justify-between items-center mb-6">
+          <h2 className="text-2xl font-bold text-white">Join the Community</h2>
+          <button
+            onClick={onClose}
+            className="text-gray-400 hover:text-white transition-colors"
+          >
+            ✕
+          </button>
+        </div>
+        
+        <form className="space-y-4">
+          <div>
+            <label className="block text-sm font-medium text-gray-300 mb-2">
+              Full Name
+            </label>
+            <input
+              type="text"
+              className="w-full px-4 py-3 rounded-lg bg-gray-700 border border-gray-600 text-white focus:border-emerald-500 focus:outline-none"
+              placeholder="Enter your full name"
+            />
+          </div>
+          
+          <div>
+            <label className="block text-sm font-medium text-gray-300 mb-2">
+              Email Address
+            </label>
+            <input
+              type="email"
+              className="w-full px-4 py-3 rounded-lg bg-gray-700 border border-gray-600 text-white focus:border-emerald-500 focus:outline-none"
+              placeholder="Enter your email"
+            />
+          </div>
+          
+          <div>
+            <label className="block text-sm font-medium text-gray-300 mb-2">
+              University/Institution
+            </label>
+            <select className="w-full px-4 py-3 rounded-lg bg-gray-700 border border-gray-600 text-white focus:border-emerald-500 focus:outline-none">
+              <option value="">Select your institution</option>
+              <option value="iit-bombay">IIT Bombay</option>
+              <option value="iit-delhi">IIT Delhi</option>
+              <option value="iit-kanpur">IIT Kanpur</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+          
+          <div>
+            <label className="block text-sm font-medium text-gray-300 mb-2">
+              City
+            </label>
+            <select className="w-full px-4 py-3 rounded-lg bg-gray-700 border border-gray-600 text-white focus:border-emerald-500 focus:outline-none">
+              <option value="">Select your city</option>
+              <option value="mumbai">Mumbai</option>
+              <option value="delhi">Delhi</option>
+              <option value="bangalore">Bangalore</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+          
+          <button
+            type="submit"
+            className="w-full bg-emerald-600 hover:bg-emerald-700 text-white py-3 rounded-lg font-semibold transition-colors"
+          >
+            Join Community
+          </button>
+        </form>
+      </motion.div>
+    </div>
+  );
+};
     streakDays: 7
   };
 };
