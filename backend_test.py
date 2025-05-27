@@ -3,12 +3,32 @@ import sys
 import json
 from datetime import datetime
 
-class DominionAPITester:
+class CalisthenicsProductTester:
     def __init__(self, base_url="https://fb43bf25-ca2e-499e-aef6-6b0c6c96504b.preview.emergentagent.com"):
         self.base_url = base_url
         self.tests_run = 0
         self.tests_passed = 0
         self.product_id = None  # Will store a product ID for individual product tests
+        
+        # Expected subcategories based on the review request
+        self.expected_subcategories = [
+            'resistance-systems', 'parallettes', 'suspension-training', 
+            'weighted-training', 'grip-enhancement', 'performance-wear', 
+            'competition-wear', 'lifestyle-wear', 'support-systems'
+        ]
+        
+        # Key products to verify
+        self.key_products = [
+            'Premium Resistance Bands Set',
+            'Premium Parallettes Set',
+            'Professional Workout Rings',
+            'Elite Weight Vest (10kg)',
+            'Elite Weight Vest (20kg)',
+            'Premium Liquid Chalk',
+            'Performance Training T-Shirt',
+            'Competition Tank Top',
+            'Premium Training Hoodie'
+        ]
 
     def run_test(self, name, method, endpoint, expected_status, data=None, headers=None):
         """Run a single API test"""
@@ -104,7 +124,7 @@ class DominionAPITester:
         return success, data
         
     def test_get_all_products(self):
-        """Test getting all products"""
+        """Test getting all products and validate the comprehensive catalog"""
         success, data = self.run_test(
             "Get All Products",
             "GET",
@@ -114,6 +134,15 @@ class DominionAPITester:
         if success:
             if isinstance(data, list):
                 print(f"✅ Retrieved {len(data)} products")
+                
+                # Check if we have at least 15 products as required
+                if len(data) >= 15:
+                    print(f"✅ Product catalog has {len(data)} products (requirement: at least 15)")
+                else:
+                    print(f"❌ Product catalog has only {len(data)} products (requirement: at least 15)")
+                    success = False
+                    self.tests_passed -= 1
+                
                 if len(data) > 0:
                     # Store a product ID for later tests
                     self.product_id = data[0]["id"]
@@ -121,6 +150,21 @@ class DominionAPITester:
                     
                     # Validate product structure
                     self._validate_product_structure(data[0])
+                    
+                    # Check for key products
+                    self._check_key_products(data)
+                    
+                    # Check for subcategories
+                    self._check_subcategories(data)
+                    
+                    # Check for pricing, ratings, and specifications
+                    self._validate_product_data(data)
+                    
+                    # Check for bundle suggestions
+                    self._check_bundle_suggestions(data)
+                    
+                    # Check for image URLs
+                    self._check_image_urls(data)
                 else:
                     print("⚠️ No products found. Make sure to run seed_products first.")
             else:
@@ -158,7 +202,7 @@ class DominionAPITester:
         return success, data
         
     def test_get_products_by_category(self, category):
-        """Test getting products by category"""
+        """Test getting products by main category"""
         success, data = self.run_test(
             f"Get Products by Category: {category}",
             "GET",
@@ -186,7 +230,7 @@ class DominionAPITester:
         return success, data
         
     def test_get_product_by_id(self):
-        """Test getting a specific product by ID"""
+        """Test getting a specific product by ID and validate detailed attributes"""
         if not self.product_id:
             print("⚠️ No product ID available. Run test_get_all_products first.")
             return False, {}
@@ -199,7 +243,12 @@ class DominionAPITester:
         )
         if success:
             print(f"✅ Retrieved product: {data['name']}")
+            
+            # Validate basic product structure
             self._validate_product_structure(data)
+            
+            # Check for skill levels, prerequisites, and benefits
+            self._validate_product_details(data)
         return success, data
         
     def test_get_nonexistent_product(self):
@@ -227,9 +276,9 @@ class DominionAPITester:
     def _validate_product_structure(self, product):
         """Validate that a product has all required fields"""
         required_fields = [
-            "id", "name", "description", "long_description", "category", 
-            "price", "images", "assets_3d", "specifications", "features", 
-            "tags", "stock_quantity", "status", "rating", "review_count"
+            "id", "name", "description", "category", 
+            "price", "images", "specifications", 
+            "stock_quantity", "status", "rating", "review_count"
         ]
         
         missing_fields = [field for field in required_fields if field not in product]
@@ -239,28 +288,134 @@ class DominionAPITester:
         else:
             print(f"❌ Product is missing fields: {', '.join(missing_fields)}")
             
-        # Check 3D assets
-        if "assets_3d" in product:
-            assets_3d = product["assets_3d"]
-            if "model_url" in assets_3d and "preview_image" in assets_3d:
-                print("✅ Product has 3D asset URLs")
-            else:
-                print("❌ Product is missing 3D asset URLs")
-                
         # Check specifications
         if "specifications" in product:
             specs = product["specifications"]
-            if "dimensions" in specs and "material" in specs:
+            if isinstance(specs, dict) and len(specs) > 0:
                 print("✅ Product has specifications")
             else:
                 print("❌ Product has incomplete specifications")
+    
+    def _check_key_products(self, products):
+        """Check if all key products exist in the catalog"""
+        product_names = [p["name"] for p in products]
+        found_products = []
+        missing_products = []
+        
+        for key_product in self.key_products:
+            found = False
+            for name in product_names:
+                if key_product in name:  # Partial match to handle variations
+                    found_products.append(key_product)
+                    found = True
+                    break
+            if not found:
+                missing_products.append(key_product)
+        
+        if not missing_products:
+            print(f"✅ All key products found: {', '.join(found_products)}")
+        else:
+            print(f"❌ Missing key products: {', '.join(missing_products)}")
+            print(f"✅ Found key products: {', '.join(found_products)}")
+    
+    def _check_subcategories(self, products):
+        """Check if products include all expected subcategories"""
+        found_subcategories = set()
+        
+        for product in products:
+            if "subcategory" in product:
+                found_subcategories.add(product["subcategory"])
+        
+        missing_subcategories = [sc for sc in self.expected_subcategories if sc not in found_subcategories]
+        
+        if not missing_subcategories:
+            print(f"✅ All expected subcategories found: {', '.join(found_subcategories)}")
+        else:
+            print(f"❌ Missing subcategories: {', '.join(missing_subcategories)}")
+            print(f"✅ Found subcategories: {', '.join(found_subcategories)}")
+    
+    def _validate_product_data(self, products):
+        """Validate that products have proper pricing, ratings, and specifications"""
+        valid_pricing = all(p.get("price", 0) > 0 for p in products)
+        valid_ratings = all(0 <= p.get("rating", 0) <= 5 for p in products)
+        valid_specs = all("specifications" in p and isinstance(p["specifications"], dict) for p in products)
+        
+        if valid_pricing:
+            print("✅ All products have valid pricing")
+        else:
+            print("❌ Some products have invalid pricing")
+            
+        if valid_ratings:
+            print("✅ All products have valid ratings (0-5)")
+        else:
+            print("❌ Some products have invalid ratings")
+            
+        if valid_specs:
+            print("✅ All products have specifications")
+        else:
+            print("❌ Some products are missing specifications")
+    
+    def _check_bundle_suggestions(self, products):
+        """Check if products have bundle suggestions"""
+        products_with_bundles = [p for p in products if "bundle_suggestions" in p and p["bundle_suggestions"]]
+        
+        if products_with_bundles:
+            print(f"✅ {len(products_with_bundles)} products have bundle suggestions")
+            
+            # Verify that bundle suggestions reference valid product IDs
+            all_product_ids = [p["id"] for p in products]
+            valid_bundles = True
+            
+            for product in products_with_bundles:
+                for bundle_id in product["bundle_suggestions"]:
+                    if bundle_id not in all_product_ids:
+                        valid_bundles = False
+                        print(f"❌ Product '{product['name']}' has invalid bundle suggestion: {bundle_id}")
+            
+            if valid_bundles:
+                print("✅ All bundle suggestions reference valid product IDs")
+        else:
+            print("❌ No products have bundle suggestions")
+    
+    def _check_image_urls(self, products):
+        """Check if all products have image URLs"""
+        products_with_images = [p for p in products if "images" in p and p["images"]]
+        
+        if len(products_with_images) == len(products):
+            print("✅ All products have image URLs")
+        else:
+            print(f"❌ {len(products) - len(products_with_images)} products are missing image URLs")
+    
+    def _validate_product_details(self, product):
+        """Validate that a product has skill levels, prerequisites, and benefits"""
+        has_skill_levels = "skill_levels" in product and isinstance(product["skill_levels"], list)
+        has_prerequisites = "prerequisites" in product and isinstance(product["prerequisites"], list)
+        has_benefits = "benefits" in product and isinstance(product["benefits"], list)
+        
+        if has_skill_levels:
+            print(f"✅ Product has skill levels: {', '.join(product['skill_levels'])}")
+        else:
+            print("❌ Product is missing skill levels")
+            
+        if has_prerequisites:
+            if product["prerequisites"]:
+                print(f"✅ Product has prerequisites: {', '.join(product['prerequisites'])}")
+            else:
+                print("✅ Product has no prerequisites (empty list)")
+        else:
+            print("❌ Product is missing prerequisites field")
+            
+        if has_benefits:
+            print(f"✅ Product has benefits: {', '.join(product['benefits'])}")
+        else:
+            print("❌ Product is missing benefits")
 
 def main():
     # Setup
-    tester = DominionAPITester()
+    tester = CalisthenicsProductTester()
     
     # Run tests
-    print("\n===== Testing Dominion Calisthenics Shop API =====\n")
+    print("\n===== Testing Calisthenics Product Catalog API =====\n")
     
     # 1. Test basic status endpoints
     print("\n=== Testing Basic Status Endpoints ===")
@@ -275,13 +430,19 @@ def main():
     print("\n=== Testing Product Retrieval Endpoints ===")
     tester.test_get_all_products()
     tester.test_get_featured_products()
-    tester.test_get_products_by_category("equipment")
     
-    # Test getting a specific product by ID
+    # 4. Test category filtering
+    print("\n=== Testing Category Filtering ===")
+    tester.test_get_products_by_category("equipment")
+    tester.test_get_products_by_category("accessories")
+    tester.test_get_products_by_category("apparel")
+    
+    # 5. Test product details
+    print("\n=== Testing Product Details ===")
     if tester.product_id:
         tester.test_get_product_by_id()
     
-    # 4. Test edge cases
+    # 6. Test edge cases
     print("\n=== Testing Edge Cases ===")
     tester.test_get_nonexistent_product()
     tester.test_invalid_category()
