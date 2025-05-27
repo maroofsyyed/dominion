@@ -1739,7 +1739,11 @@ export const ShopPage = () => {
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('all');
+  const [subcategory, setSubcategory] = useState('all');
   const [viewMode, setViewMode] = useState('grid');
+  const [filtersOpen, setFiltersOpen] = useState(false);
+  const [sortBy, setSortBy] = useState('featured');
+  const [priceRange, setPriceRange] = useState([0, 500]);
   const navigate = useNavigate();
 
   // Fetch products from API
@@ -1761,12 +1765,31 @@ export const ShopPage = () => {
     fetchProducts();
   }, []);
 
-  // Filter products based on search and category
+  // Enhanced filtering with subcategories
   const filteredProducts = products.filter(product => {
     const matchesSearch = product.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
                          product.description.toLowerCase().includes(searchQuery.toLowerCase());
     const matchesCategory = selectedCategory === 'all' || product.category === selectedCategory;
-    return matchesSearch && matchesCategory;
+    const matchesSubcategory = subcategory === 'all' || product.subcategory === subcategory;
+    const matchesPrice = product.price >= priceRange[0] && product.price <= priceRange[1];
+    
+    return matchesSearch && matchesCategory && matchesSubcategory && matchesPrice;
+  });
+
+  // Enhanced sorting
+  const sortedProducts = [...filteredProducts].sort((a, b) => {
+    switch (sortBy) {
+      case 'price-low':
+        return a.price - b.price;
+      case 'price-high':
+        return b.price - a.price;
+      case 'rating':
+        return b.rating - a.rating;
+      case 'newest':
+        return b.id.localeCompare(a.id);
+      default:
+        return 0;
+    }
   });
 
   const handleViewProduct = (product) => {
@@ -1778,20 +1801,34 @@ export const ShopPage = () => {
     console.log('Added to cart:', product.name);
   };
 
+  const handleSelectBundle = (bundle) => {
+    console.log('Selected bundle:', bundle.name);
+    // TODO: Implement bundle selection
+  };
+
+  const toggleFilters = () => {
+    setFiltersOpen(!filtersOpen);
+  };
+
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-emerald-50 to-teal-50 flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-br from-emerald-50 via-teal-50 to-blue-50 flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-emerald-500 mx-auto mb-4"></div>
-          <p className="text-gray-600">Loading products...</p>
+          <motion.div
+            className="w-16 h-16 border-4 border-emerald-500 border-t-transparent rounded-full mx-auto mb-4"
+            animate={{ rotate: 360 }}
+            transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+          />
+          <p className="text-gray-600 text-lg">Loading premium gear...</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-emerald-50 to-teal-50 py-12">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-gradient-to-br from-emerald-50 via-teal-50 to-blue-50">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* Enhanced Header with Hero */}
         <ShopHeader
           searchQuery={searchQuery}
           setSearchQuery={setSearchQuery}
@@ -1799,49 +1836,193 @@ export const ShopPage = () => {
           setViewMode={setViewMode}
           selectedCategory={selectedCategory}
           setSelectedCategory={setSelectedCategory}
+          subcategory={subcategory}
+          setSubcategory={setSubcategory}
+          onToggleFilters={toggleFilters}
+          filtersOpen={filtersOpen}
         />
 
-        {/* Featured Hero Banner */}
-        <div className="relative mb-12 rounded-2xl overflow-hidden">
-          <img 
-            src="https://images.pexels.com/photos/7671467/pexels-photo-7671467.jpeg"
-            alt="Shop Hero"
-            className="w-full h-64 object-cover"
-          />
-          <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-            <div className="text-center text-white">
-              <h2 className="text-3xl font-bold mb-4">Premium Calisthenics Gear</h2>
-              <p className="text-lg mb-6">Transform your training with professional equipment</p>
-              <button className="bg-emerald-500 text-white px-8 py-3 rounded-lg font-semibold hover:bg-emerald-600 transition-colors">
-                Shop Now
+        {/* Category Section */}
+        <CategorySection
+          selectedCategory={selectedCategory}
+          setSelectedCategory={setSelectedCategory}
+          subcategory={subcategory}
+          setSubcategory={setSubcategory}
+        />
+
+        {/* Skill-Based Bundles */}
+        <SkillBundles onSelectBundle={handleSelectBundle} />
+
+        {/* Enhanced Filters Sidebar */}
+        <AnimatePresence>
+          {filtersOpen && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: 'auto' }}
+              exit={{ opacity: 0, height: 0 }}
+              className="bg-white rounded-2xl shadow-lg p-6 mb-8"
+            >
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                {/* Sort Options */}
+                <div>
+                  <h3 className="text-lg font-semibold text-gray-900 mb-4">Sort By</h3>
+                  <div className="space-y-2">
+                    {[
+                      { value: 'featured', label: 'Featured' },
+                      { value: 'price-low', label: 'Price: Low to High' },
+                      { value: 'price-high', label: 'Price: High to Low' },
+                      { value: 'rating', label: 'Highest Rated' },
+                      { value: 'newest', label: 'Newest' }
+                    ].map((option) => (
+                      <label key={option.value} className="flex items-center gap-2 cursor-pointer">
+                        <input
+                          type="radio"
+                          name="sort"
+                          value={option.value}
+                          checked={sortBy === option.value}
+                          onChange={(e) => setSortBy(e.target.value)}
+                          className="text-emerald-500"
+                        />
+                        <span className="text-gray-700">{option.label}</span>
+                      </label>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Price Range */}
+                <div>
+                  <h3 className="text-lg font-semibold text-gray-900 mb-4">Price Range</h3>
+                  <div className="space-y-4">
+                    <div className="flex items-center gap-2">
+                      <input
+                        type="number"
+                        placeholder="Min"
+                        value={priceRange[0]}
+                        onChange={(e) => setPriceRange([Number(e.target.value), priceRange[1]])}
+                        className="w-20 px-2 py-1 border border-gray-300 rounded text-sm"
+                      />
+                      <span>-</span>
+                      <input
+                        type="number"
+                        placeholder="Max"
+                        value={priceRange[1]}
+                        onChange={(e) => setPriceRange([priceRange[0], Number(e.target.value)])}
+                        className="w-20 px-2 py-1 border border-gray-300 rounded text-sm"
+                      />
+                    </div>
+                    <div className="text-sm text-gray-600">
+                      ${priceRange[0]} - ${priceRange[1]}
+                    </div>
+                  </div>
+                </div>
+
+                {/* Stock Status */}
+                <div>
+                  <h3 className="text-lg font-semibold text-gray-900 mb-4">Availability</h3>
+                  <div className="space-y-2">
+                    <label className="flex items-center gap-2 cursor-pointer">
+                      <input type="checkbox" className="text-emerald-500" defaultChecked />
+                      <span className="text-gray-700">In Stock</span>
+                    </label>
+                    <label className="flex items-center gap-2 cursor-pointer">
+                      <input type="checkbox" className="text-emerald-500" />
+                      <span className="text-gray-700">Out of Stock</span>
+                    </label>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        {/* Results Summary */}
+        <div className="flex items-center justify-between mb-6">
+          <p className="text-gray-600">
+            Showing {sortedProducts.length} of {products.length} products
+          </p>
+          <div className="text-sm text-gray-500">
+            {searchQuery && `Results for "${searchQuery}"`}
+          </div>
+        </div>
+
+        {/* Enhanced Products Grid */}
+        <motion.div 
+          className={`grid gap-6 ${
+            viewMode === 'grid' 
+              ? 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4' 
+              : 'grid-cols-1'
+          }`}
+          layout
+        >
+          <AnimatePresence>
+            {sortedProducts.map((product, index) => (
+              <motion.div
+                key={product.id}
+                layout
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+                transition={{ duration: 0.3, delay: index * 0.05 }}
+              >
+                <ProductCard
+                  product={product}
+                  onViewProduct={handleViewProduct}
+                  onAddToCart={handleAddToCart}
+                />
+              </motion.div>
+            ))}
+          </AnimatePresence>
+        </motion.div>
+
+        {/* Enhanced No Products Found */}
+        {sortedProducts.length === 0 && !loading && (
+          <motion.div
+            className="text-center py-16"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+          >
+            <div className="w-24 h-24 mx-auto mb-6 bg-gray-100 rounded-full flex items-center justify-center">
+              <Package size={48} className="text-gray-400" />
+            </div>
+            <h3 className="text-2xl font-semibold text-gray-900 mb-4">No products found</h3>
+            <p className="text-gray-600 mb-6 max-w-md mx-auto">
+              We couldn't find any products matching your criteria. Try adjusting your filters or search terms.
+            </p>
+            <button
+              onClick={() => {
+                setSearchQuery('');
+                setSelectedCategory('all');
+                setSubcategory('all');
+                setPriceRange([0, 500]);
+              }}
+              className="bg-emerald-500 text-white px-6 py-3 rounded-lg font-semibold hover:bg-emerald-600 transition-colors"
+            >
+              Clear All Filters
+            </button>
+          </motion.div>
+        )}
+
+        {/* Call to Action Section */}
+        {sortedProducts.length > 0 && (
+          <motion.div
+            className="mt-16 bg-gradient-to-r from-emerald-500 to-teal-600 rounded-2xl p-8 text-white text-center"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.5 }}
+          >
+            <h2 className="text-3xl font-bold mb-4">Ready to Transform Your Training?</h2>
+            <p className="text-lg mb-6 text-emerald-100">
+              Join thousands of athletes who trust our equipment for their calisthenics journey
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <button className="bg-white text-emerald-600 px-8 py-3 rounded-lg font-semibold hover:bg-gray-50 transition-colors">
+                View Training Programs
+              </button>
+              <button className="border-2 border-white text-white px-8 py-3 rounded-lg font-semibold hover:bg-white hover:text-emerald-600 transition-colors">
+                Contact Support
               </button>
             </div>
-          </div>
-        </div>
-
-        {/* Products Grid */}
-        <div className={`grid gap-6 ${
-          viewMode === 'grid' 
-            ? 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4' 
-            : 'grid-cols-1'
-        }`}>
-          {filteredProducts.map((product) => (
-            <ProductCard
-              key={product.id}
-              product={product}
-              onViewProduct={handleViewProduct}
-              onAddToCart={handleAddToCart}
-            />
-          ))}
-        </div>
-
-        {/* No Products Found */}
-        {filteredProducts.length === 0 && !loading && (
-          <div className="text-center py-12">
-            <Package size={64} className="mx-auto text-gray-400 mb-4" />
-            <h3 className="text-xl font-semibold text-gray-900 mb-2">No products found</h3>
-            <p className="text-gray-600">Try adjusting your search or filters</p>
-          </div>
+          </motion.div>
         )}
       </div>
     </div>
