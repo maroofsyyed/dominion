@@ -241,7 +241,8 @@ metadata:
 test_plan:
   current_focus:
     - "Product Seeding"
-  stuck_tasks: []
+  stuck_tasks: 
+    - "Product Seeding"
   test_all: false
   test_priority: "high_first"
 
