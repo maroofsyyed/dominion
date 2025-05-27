@@ -585,6 +585,552 @@ export const exercises = {
       'Knee valgus (knees caving in)',
       'Forward lean with chest'
     ]
+  },
+
+  // Additional VERTICAL PULL EXERCISES
+  'ring-l-sit-pull-up': {
+    id: 'ring-l-sit-pull-up',
+    name: 'Ring L-Sit Pull Up',
+    category: 'vertical-pull',
+    skillLevel: 'intermediate',
+    description: 'Pull-up performed while maintaining L-sit position.',
+    instructions: [
+      'Start in ring support with L-sit position',
+      'Lower to dead hang while maintaining leg position',
+      'Pull up to support while keeping legs horizontal',
+      'Control descent back to bottom position'
+    ],
+    prerequisites: ['archer-row'],
+    progressionOrder: 6,
+    demoVideo: 'https://www.youtube.com/embed/fZhmZnIPJFI',
+    tips: [
+      'Master L-sit and pull-ups separately first',
+      'Focus on keeping legs horizontal throughout',
+      'Use slow, controlled movements'
+    ],
+    commonMistakes: [
+      'Letting legs drop during movement',
+      'Using momentum to assist',
+      'Not achieving full range of motion'
+    ]
+  },
+
+  'muscle-up': {
+    id: 'muscle-up',
+    name: 'Muscle Up',
+    category: 'vertical-pull',
+    skillLevel: 'advanced',
+    description: 'Complete movement from hang to support above the bar.',
+    instructions: [
+      'Start in dead hang with false grip',
+      'Pull explosively to chest level',
+      'Transition over the bar with lean forward',
+      'Press to full support position',
+      'Lower under control'
+    ],
+    prerequisites: ['ring-l-sit-pull-up'],
+    progressionOrder: 7,
+    demoVideo: 'https://www.youtube.com/embed/fZhmZnIPJFI',
+    tips: [
+      'Master false grip first',
+      'Practice transition separately',
+      'Build explosive pulling strength'
+    ],
+    commonMistakes: [
+      'Not using false grip',
+      'Insufficient pulling strength',
+      'Poor transition technique'
+    ]
+  },
+
+  'one-arm-pull-up': {
+    id: 'one-arm-pull-up',
+    name: 'One Arm Pull Up',
+    category: 'vertical-pull',
+    skillLevel: 'elite',
+    description: 'Ultimate pulling exercise using only one arm.',
+    instructions: [
+      'Hang from bar with one arm',
+      'Keep other arm at side or behind back',
+      'Pull body up until chin clears bar',
+      'Lower under complete control'
+    ],
+    prerequisites: ['muscle-up'],
+    progressionOrder: 8,
+    demoVideo: 'https://www.youtube.com/embed/fZhmZnIPJFI',
+    tips: [
+      'Build up with assisted variations',
+      'Develop exceptional lat strength',
+      'Practice hang time extensively'
+    ],
+    commonMistakes: [
+      'Using other arm for assistance',
+      'Not building sufficient base strength',
+      'Poor body positioning'
+    ]
+  },
+
+  // Additional VERTICAL PUSH EXERCISES
+  'pull-to-inverted': {
+    id: 'pull-to-inverted',
+    name: 'Pull to Inverted',
+    category: 'vertical-push',
+    skillLevel: 'beginner',
+    description: 'Dynamic movement from hang to inverted position.',
+    instructions: [
+      'Start in dead hang position',
+      'Pull knees to chest',
+      'Continue rotating until inverted',
+      'Control the movement throughout'
+    ],
+    prerequisites: ['arch-hang'],
+    progressionOrder: 3,
+    demoVideo: 'https://www.youtube.com/embed/fZhmZnIPJFI',
+    tips: [
+      'Build shoulder flexibility first',
+      'Use controlled movements',
+      'Progress gradually'
+    ],
+    commonMistakes: [
+      'Moving too fast',
+      'Insufficient shoulder mobility',
+      'Not controlling the descent'
+    ]
+  },
+
+  'handstand': {
+    id: 'handstand',
+    name: 'Handstand',
+    category: 'vertical-push',
+    skillLevel: 'intermediate',
+    description: 'Fundamental inverted position on hands.',
+    instructions: [
+      'Start in downward dog position',
+      'Walk feet up wall or kick up',
+      'Balance on hands with body straight',
+      'Hold position with control'
+    ],
+    prerequisites: ['pull-to-inverted'],
+    progressionOrder: 4,
+    demoVideo: 'https://www.youtube.com/embed/fZhmZnIPJFI',
+    tips: [
+      'Build wrist and shoulder strength',
+      'Practice against wall first',
+      'Focus on hollow body position'
+    ],
+    commonMistakes: [
+      'Arching back excessively',
+      'Not engaging core',
+      'Poor hand placement'
+    ]
+  },
+
+  'handstand-push-up': {
+    id: 'handstand-push-up',
+    name: 'Handstand Push Up',
+    category: 'vertical-push',
+    skillLevel: 'advanced',
+    description: 'Push-up performed in handstand position.',
+    instructions: [
+      'Start in stable handstand position',
+      'Lower head towards ground',
+      'Press back to full handstand',
+      'Maintain balance throughout'
+    ],
+    prerequisites: ['handstand'],
+    progressionOrder: 5,
+    demoVideo: 'https://www.youtube.com/embed/fZhmZnIPJFI',
+    tips: [
+      'Master handstand hold first',
+      'Start with head touching ground',
+      'Build pressing strength gradually'
+    ],
+    commonMistakes: [
+      'Insufficient handstand strength',
+      'Not maintaining balance',
+      'Incomplete range of motion'
+    ]
+  },
+
+  'human-flag': {
+    id: 'human-flag',
+    name: 'Human Flag',
+    category: 'vertical-push',
+    skillLevel: 'elite',
+    description: 'Ultimate core and pressing strength demonstration.',
+    instructions: [
+      'Grip vertical pole with both hands',
+      'Lift body horizontal to ground',
+      'Maintain straight body line',
+      'Hold position with full extension'
+    ],
+    prerequisites: ['handstand-push-up'],
+    progressionOrder: 6,
+    demoVideo: 'https://www.youtube.com/embed/fZhmZnIPJFI',
+    tips: [
+      'Build exceptional core strength',
+      'Practice with bent knees first',
+      'Develop shoulder stability'
+    ],
+    commonMistakes: [
+      'Attempting without sufficient strength',
+      'Poor grip positioning',
+      'Not maintaining body alignment'
+    ]
+  },
+
+  // Additional HORIZONTAL PUSH EXERCISES
+  'one-leg-l-sit': {
+    id: 'one-leg-l-sit',
+    name: 'One Leg L-Sit',
+    category: 'horizontal-push',
+    skillLevel: 'beginner',
+    description: 'L-sit progression with one leg extended.',
+    instructions: [
+      'Sit between parallettes or on rings',
+      'Support body weight on straight arms',
+      'Extend one leg straight forward',
+      'Keep other leg bent or tucked'
+    ],
+    prerequisites: ['foot-sup-l-sit'],
+    progressionOrder: 2,
+    demoVideo: 'https://www.youtube.com/embed/fZhmZnIPJFI',
+    tips: [
+      'Alternate legs for balanced development',
+      'Focus on shoulder depression',
+      'Build up hold time gradually'
+    ],
+    commonMistakes: [
+      'Not supporting full body weight',
+      'Allowing shoulders to shrug',
+      'Bending extended leg'
+    ]
+  },
+
+  'l-sit': {
+    id: 'l-sit',
+    name: 'L-Sit',
+    category: 'horizontal-push',
+    skillLevel: 'intermediate',
+    description: 'Classic core exercise with both legs extended.',
+    instructions: [
+      'Support body on parallettes or rings',
+      'Lift both legs horizontal to ground',
+      'Keep legs straight and together',
+      'Maintain position for time'
+    ],
+    prerequisites: ['one-leg-l-sit'],
+    progressionOrder: 3,
+    demoVideo: 'https://www.youtube.com/embed/fZhmZnIPJFI',
+    tips: [
+      'Build hip flexor strength',
+      'Keep shoulders depressed',
+      'Engage core strongly'
+    ],
+    commonMistakes: [
+      'Letting legs drop',
+      'Hunching shoulders',
+      'Not achieving horizontal leg position'
+    ]
+  },
+
+  'planche': {
+    id: 'planche',
+    name: 'Planche',
+    category: 'horizontal-push',
+    skillLevel: 'advanced',
+    description: 'Advanced horizontal hold with body parallel to ground.',
+    instructions: [
+      'Start in push-up position',
+      'Lean forward and lift feet off ground',
+      'Hold body horizontal with straight arms',
+      'Maintain position without touching ground'
+    ],
+    prerequisites: ['l-sit'],
+    progressionOrder: 4,
+    demoVideo: 'https://www.youtube.com/embed/fZhmZnIPJFI',
+    tips: [
+      'Master tuck planche first',
+      'Build exceptional shoulder strength',
+      'Practice lean progressions'
+    ],
+    commonMistakes: [
+      'Insufficient lean forward',
+      'Not building adequate strength base',
+      'Poor hand positioning'
+    ]
+  },
+
+  'one-arm-handstand': {
+    id: 'one-arm-handstand',
+    name: 'One Arm Handstand',
+    category: 'horizontal-push',
+    skillLevel: 'elite',
+    description: 'Ultimate balance and strength feat on one hand.',
+    instructions: [
+      'Start in two-hand handstand',
+      'Shift weight to one hand',
+      'Lift other hand off ground',
+      'Balance on single hand'
+    ],
+    prerequisites: ['planche'],
+    progressionOrder: 5,
+    demoVideo: 'https://www.youtube.com/embed/fZhmZnIPJFI',
+    tips: [
+      'Master two-hand handstand first',
+      'Build exceptional pressing strength',
+      'Practice weight shifts extensively'
+    ],
+    commonMistakes: [
+      'Attempting without sufficient base',
+      'Poor weight distribution',
+      'Inadequate finger strength'
+    ]
+  },
+
+  // Additional CORE EXERCISES
+  'dip': {
+    id: 'dip',
+    name: 'Dip',
+    category: 'core',
+    skillLevel: 'beginner',
+    description: 'Vertical pushing exercise on parallel bars.',
+    instructions: [
+      'Start in support position on bars',
+      'Lower body by bending arms',
+      'Descend until shoulders below elbows',
+      'Press back to starting position'
+    ],
+    prerequisites: ['support-hold'],
+    progressionOrder: 2,
+    demoVideo: 'https://www.youtube.com/embed/fZhmZnIPJFI',
+    tips: [
+      'Keep body upright',
+      'Control the negative portion',
+      'Build up range gradually'
+    ],
+    commonMistakes: [
+      'Not achieving full depth',
+      'Leaning too far forward',
+      'Using momentum'
+    ]
+  },
+
+  'ring-dip': {
+    id: 'ring-dip',
+    name: 'Ring Dip',
+    category: 'core',
+    skillLevel: 'intermediate',
+    description: 'Dip performed on unstable rings for increased difficulty.',
+    instructions: [
+      'Start in ring support position',
+      'Lower with control as rings move',
+      'Maintain ring stability',
+      'Press back to support'
+    ],
+    prerequisites: ['dip'],
+    progressionOrder: 3,
+    demoVideo: 'https://www.youtube.com/embed/fZhmZnIPJFI',
+    tips: [
+      'Master bar dips first',
+      'Focus on ring stability',
+      'Build shoulder stabilizers'
+    ],
+    commonMistakes: [
+      'Allowing rings to flare out',
+      'Not controlling the movement',
+      'Insufficient stability strength'
+    ]
+  },
+
+  'wall-handstand': {
+    id: 'wall-handstand',
+    name: 'Wall Handstand',
+    category: 'core',
+    skillLevel: 'intermediate',
+    description: 'Handstand with wall support for balance.',
+    instructions: [
+      'Face away from wall',
+      'Kick up to handstand against wall',
+      'Keep body straight and tight',
+      'Hold position for time'
+    ],
+    prerequisites: ['ring-dip'],
+    progressionOrder: 4,
+    demoVideo: 'https://www.youtube.com/embed/fZhmZnIPJFI',
+    tips: [
+      'Keep minimal wall contact',
+      'Focus on hollow body position',
+      'Build wrist strength'
+    ],
+    commonMistakes: [
+      'Relying too heavily on wall',
+      'Arching back excessively',
+      'Poor hand placement'
+    ]
+  },
+
+  'freestanding-handstand': {
+    id: 'freestanding-handstand',
+    name: 'Freestanding Handstand',
+    category: 'core',
+    skillLevel: 'advanced',
+    description: 'Handstand without any support or assistance.',
+    instructions: [
+      'Kick up to handstand position',
+      'Balance without wall support',
+      'Maintain straight body line',
+      'Control with finger pressure'
+    ],
+    prerequisites: ['wall-handstand'],
+    progressionOrder: 5,
+    demoVideo: 'https://www.youtube.com/embed/fZhmZnIPJFI',
+    tips: [
+      'Practice consistently',
+      'Focus on finger balance',
+      'Build core stability'
+    ],
+    commonMistakes: [
+      'Attempting too early',
+      'Poor balance technique',
+      'Insufficient practice time'
+    ]
+  },
+
+  'ring-planche-push-up': {
+    id: 'ring-planche-push-up',
+    name: 'Ring Planche Push Up',
+    category: 'core',
+    skillLevel: 'elite',
+    description: 'Ultimate pushing exercise combining planche and push-up on rings.',
+    instructions: [
+      'Start in ring planche position',
+      'Lower body while maintaining planche',
+      'Press back to starting position',
+      'Control rings throughout movement'
+    ],
+    prerequisites: ['freestanding-handstand'],
+    progressionOrder: 6,
+    demoVideo: 'https://www.youtube.com/embed/fZhmZnIPJFI',
+    tips: [
+      'Master ring planche first',
+      'Build exceptional pressing strength',
+      'Practice on stable surface first'
+    ],
+    commonMistakes: [
+      'Insufficient planche strength',
+      'Poor ring control',
+      'Incomplete range of motion'
+    ]
+  },
+
+  // Additional LEGS EXERCISES
+  'full-squat': {
+    id: 'full-squat',
+    name: 'Full Squat',
+    category: 'legs',
+    skillLevel: 'beginner',
+    description: 'Deep squat below parallel with full range of motion.',
+    instructions: [
+      'Lower past parallel position',
+      'Descend as deep as mobility allows',
+      'Keep chest up and knees tracking',
+      'Drive through heels to stand'
+    ],
+    prerequisites: ['parallel-squat'],
+    progressionOrder: 3,
+    demoVideo: 'https://www.youtube.com/embed/fZhmZnIPJFI',
+    tips: [
+      'Work on ankle mobility',
+      'Improve hip flexibility',
+      'Maintain proper alignment'
+    ],
+    commonMistakes: [
+      'Rounding lower back',
+      'Knees caving inward',
+      'Rising onto toes'
+    ]
+  },
+
+  'pistol-squat': {
+    id: 'pistol-squat',
+    name: 'Pistol Squat',
+    category: 'legs',
+    skillLevel: 'intermediate',
+    description: 'Single-leg squat with other leg extended forward.',
+    instructions: [
+      'Stand on one leg',
+      'Extend other leg straight forward',
+      'Lower into deep single-leg squat',
+      'Rise back to standing position'
+    ],
+    prerequisites: ['full-squat'],
+    progressionOrder: 4,
+    demoVideo: 'https://www.youtube.com/embed/fZhmZnIPJFI',
+    tips: [
+      'Build single-leg strength gradually',
+      'Work on balance and flexibility',
+      'Use assistance initially'
+    ],
+    commonMistakes: [
+      'Not achieving full depth',
+      'Using extended leg for support',
+      'Poor balance control'
+    ]
+  },
+
+  'shrimp-squat': {
+    id: 'shrimp-squat',
+    name: 'Shrimp Squat',
+    category: 'legs',
+    skillLevel: 'advanced',
+    description: 'Advanced single-leg squat with rear leg held.',
+    instructions: [
+      'Stand on one leg',
+      'Grab other foot behind body',
+      'Lower into single-leg squat',
+      'Keep rear leg pulled to glute'
+    ],
+    prerequisites: ['pistol-squat'],
+    progressionOrder: 5,
+    demoVideo: 'https://www.youtube.com/embed/fZhmZnIPJFI',
+    tips: [
+      'Master pistol squat first',
+      'Build hip flexibility',
+      'Practice the hold position'
+    ],
+    commonMistakes: [
+      'Not maintaining rear leg position',
+      'Insufficient hip mobility',
+      'Poor balance control'
+    ]
+  },
+
+  'one-leg-nordic-curl': {
+    id: 'one-leg-nordic-curl',
+    name: 'One Leg Nordic Curl',
+    category: 'legs',
+    skillLevel: 'elite',
+    description: 'Ultimate hamstring exercise performed on single leg.',
+    instructions: [
+      'Kneel with one leg anchored',
+      'Keep other leg lifted',
+      'Lower body forward using hamstrings',
+      'Control eccentric phase completely'
+    ],
+    prerequisites: ['shrimp-squat'],
+    progressionOrder: 6,
+    demoVideo: 'https://www.youtube.com/embed/fZhmZnIPJFI',
+    tips: [
+      'Build exceptional hamstring strength',
+      'Master two-leg version first',
+      'Focus on eccentric control'
+    ],
+    commonMistakes: [
+      'Insufficient hamstring strength',
+      'Not controlling the descent',
+      'Poor starting position'
+    ]
   }
 };
 
