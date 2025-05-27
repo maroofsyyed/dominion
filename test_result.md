@@ -129,15 +129,18 @@ backend:
 
   - task: "Product Seeding"
     implemented: true
-    working: true
+    working: false
     file: "/app/backend/server.py"
-    stuck_count: 0
-    priority: "high"
+    stuck_count: 1
+    priority: "medium"
     needs_retesting: false
     status_history:
       - working: true
         agent: "testing"
         comment: "Product seeding endpoint (/api/products/seed) successfully populates the database with sample fitness products. Note: When products already exist, it returns a message indicating that seeding is skipped."
+      - working: false
+        agent: "testing"
+        comment: "Product seeding endpoint (/api/products/seed) returns a 500 error due to validation errors in the product data. The error shows missing required fields 'long_description' and 'assets_3d' in the product model. This doesn't affect the core functionality of retrieving existing products."
 
   - task: "Get All Products"
     implemented: true
