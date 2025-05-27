@@ -221,253 +221,409 @@ async def seed_products():
         return {"message": f"Products already seeded. Current count: {existing_count}"}
     
     sample_products = [
+        # RESISTANCE AND SUPPORT SYSTEMS
         {
-            "name": "Professional Gymnastic Rings",
-            "description": "Premium wooden gymnastic rings with adjustable straps",
-            "long_description": "Professional-grade wooden gymnastic rings crafted from high-quality birch wood. Perfect for building upper body strength, developing core stability, and mastering advanced calisthenics movements. Includes heavy-duty cam buckle straps rated for 2000 lbs.",
-            "category": "equipment",
-            "price": 89.99,
-            "discount_price": 69.99,
-            "images": [
-                "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b",
-                "https://images.unsplash.com/photo-1544384425-4bdeeb9fe3a0",
-                "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b"
-            ],
-            "assets_3d": {
-                "model_url": "https://cdn.shopify.com/s/files/1/models/gymnastic-rings.glb",
-                "texture_urls": ["https://cdn.shopify.com/textures/wood-rings.jpg"],
-                "preview_image": "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b"
-            },
-            "specifications": {
-                "dimensions": "9.5\" diameter rings",
-                "weight": "3.2 lbs total",
-                "material": "Birch wood rings, nylon straps",
-                "color_options": ["Natural Wood", "Black Stained"],
-                "additional_specs": {
-                    "strap_length": "15 feet each",
-                    "weight_capacity": "2000 lbs",
-                    "ring_thickness": "1.25 inches"
-                }
-            },
-            "features": [
-                "Premium birch wood construction",
-                "Heavy-duty cam buckle straps",
-                "2000 lb weight capacity",
-                "15 ft adjustable straps",
-                "Non-slip grip surface",
-                "Professional competition grade"
-            ],
-            "tags": ["rings", "calisthenics", "upper-body", "professional"],
-            "stock_quantity": 50,
-            "status": "active",
-            "rating": 4.8,
-            "review_count": 342
-        },
-        {
-            "name": "Parallette Bars Set",
-            "description": "Sturdy steel parallette bars for L-sits, handstands, and push-ups",
-            "long_description": "Heavy-duty steel parallette bars designed for serious calisthenics training. Perfect for L-sits, handstand progressions, push-up variations, and core exercises. Non-slip foam grips and rubber feet provide stability and comfort during intense training sessions.",
-            "category": "equipment",
-            "price": 124.99,
-            "images": [
-                "https://images.unsplash.com/photo-1576013551627-0cc20b96c2a7",
-                "https://images.unsplash.com/photo-1541534741688-6078c6bfb5c5",
-                "https://images.unsplash.com/photo-1576013551627-0cc20b96c2a7"
-            ],
-            "assets_3d": {
-                "model_url": "https://cdn.shopify.com/s/files/1/models/parallette-bars.glb",
-                "texture_urls": ["https://cdn.shopify.com/textures/steel-foam.jpg"],
-                "preview_image": "https://images.unsplash.com/photo-1576013551627-0cc20b96c2a7"
-            },
-            "specifications": {
-                "dimensions": "12\" H x 24\" L x 6\" W",
-                "weight": "8 lbs per bar",
-                "material": "Steel frame, foam grips",
-                "color_options": ["Black", "Red", "Blue"],
-                "additional_specs": {
-                    "weight_capacity": "300 lbs per bar",
-                    "grip_diameter": "1.5 inches",
-                    "base_width": "24 inches"
-                }
-            },
-            "features": [
-                "Heavy-duty steel construction",
-                "Non-slip foam grips",
-                "Rubber feet for stability",
-                "300 lb weight capacity per bar",
-                "Perfect height for L-sits",
-                "Powder-coated finish"
-            ],
-            "tags": ["parallettes", "handstand", "l-sit", "push-ups"],
-            "stock_quantity": 25,
-            "status": "active",
-            "rating": 4.7,
-            "review_count": 156
-        },
-        {
-            "name": "Resistance Bands Set",
-            "description": "Complete set of resistance bands for strength training",
-            "long_description": "Professional resistance band set with 5 different resistance levels. Perfect for assisted pull-ups, stretching, rehabilitation, and strength training. Includes door anchor, ankle straps, and exercise guide with 30+ exercises.",
-            "category": "equipment",
-            "price": 49.99,
-            "discount_price": 34.99,
-            "images": [
-                "https://images.unsplash.com/photo-1544384425-4b80e5ca2dd4",
-                "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b",
-                "https://images.unsplash.com/photo-1544384425-4b80e5ca2dd4"
-            ],
-            "assets_3d": {
-                "model_url": "https://cdn.shopify.com/s/files/1/models/resistance-bands.glb",
-                "texture_urls": ["https://cdn.shopify.com/textures/rubber-bands.jpg"],
-                "preview_image": "https://images.unsplash.com/photo-1544384425-4b80e5ca2dd4"
-            },
-            "specifications": {
-                "dimensions": "48\" length bands",
-                "weight": "2.5 lbs total",
-                "material": "Natural latex rubber",
-                "color_options": ["Multi-color set"],
-                "additional_specs": {
-                    "resistance_levels": "10-50 lbs per band",
-                    "band_count": "5 bands",
-                    "max_resistance": "150 lbs combined"
-                }
-            },
-            "features": [
-                "5 resistance levels (10-50 lbs)",
-                "Natural latex construction",
-                "Door anchor included",
-                "Ankle straps and handles",
-                "Exercise guide with 30+ workouts",
-                "Portable and lightweight"
-            ],
-            "tags": ["resistance", "bands", "assisted", "stretching"],
-            "stock_quantity": 100,
-            "status": "active",
-            "rating": 4.5,
-            "review_count": 89
-        },
-        {
-            "name": "Creatine Monohydrate",
-            "description": "Pure creatine monohydrate for strength and power",
-            "long_description": "Pharmaceutical-grade creatine monohydrate powder to enhance strength, power, and muscle growth. Helps increase ATP production for explosive movements and faster recovery between sets. Unflavored, pure powder that mixes easily with any beverage.",
-            "category": "supplements",
-            "price": 29.99,
-            "images": [
-                "https://images.unsplash.com/photo-1593095948071-474c5cc2989d",
-                "https://images.unsplash.com/photo-1556909610-f3e23370c71f",
-                "https://images.unsplash.com/photo-1593095948071-474c5cc2989d"
-            ],
-            "assets_3d": {
-                "model_url": "https://cdn.shopify.com/s/files/1/models/supplement-bottle.glb",
-                "texture_urls": ["https://cdn.shopify.com/textures/white-bottle.jpg"],
-                "preview_image": "https://images.unsplash.com/photo-1593095948071-474c5cc2989d"
-            },
-            "specifications": {
-                "dimensions": "4\" H x 3\" diameter",
-                "weight": "1.2 lbs",
-                "material": "HDPE plastic bottle",
-                "color_options": ["White"],
-                "additional_specs": {
-                    "serving_size": "5g",
-                    "servings_per_container": "60",
-                    "total_weight": "300g"
-                }
-            },
-            "features": [
-                "Pharmaceutical-grade purity",
-                "Unflavored powder",
-                "60 servings per container",
-                "Micronized for better absorption",
-                "Third-party tested",
-                "No artificial additives"
-            ],
-            "tags": ["creatine", "strength", "power", "supplement"],
-            "stock_quantity": 75,
-            "status": "active",
-            "rating": 4.6,
-            "review_count": 234
-        },
-        {
-            "name": "Workout Grip Gloves",
-            "description": "Premium leather grip gloves for calisthenics training",
-            "long_description": "Professional-grade leather grip gloves designed specifically for calisthenics and gymnastic training. Features reinforced palm protection, wrist support, and breathable mesh backing. Perfect for pull-ups, muscle-ups, and ring work.",
-            "category": "accessories",
+            "id": "premium-resistance-bands",
+            "name": "Premium Resistance Bands Set",
+            "description": "Professional resistance training tools with multiple resistance levels. Perfect for assisted training and progressive skill development.",
             "price": 39.99,
+            "discount_price": 32.99,
+            "category": "equipment",
+            "subcategory": "resistance-systems",
+            "skill_levels": ["beginner", "intermediate"],
+            "stock_quantity": 85,
+            "rating": 4.8,
+            "review_count": 324,
             "images": [
-                "https://images.unsplash.com/photo-1544966503-7cc5ac882d5e",
-                "https://images.unsplash.com/photo-1578662996442-48f60103fc96",
-                "https://images.unsplash.com/photo-1544966503-7cc5ac882d5e"
+                "https://images.pexels.com/photos/7672096/pexels-photo-7672096.jpeg",
+                "https://images.pexels.com/photos/6091649/pexels-photo-6091649.jpeg"
             ],
-            "assets_3d": {
-                "model_url": "https://cdn.shopify.com/s/files/1/models/workout-gloves.glb",
-                "texture_urls": ["https://cdn.shopify.com/textures/leather-mesh.jpg"],
-                "preview_image": "https://images.unsplash.com/photo-1544966503-7cc5ac882d5e"
-            },
             "specifications": {
-                "dimensions": "Various sizes (S-XL)",
-                "weight": "0.3 lbs per pair",
-                "material": "Leather palm, mesh backing",
-                "color_options": ["Black", "Brown"],
-                "additional_specs": {
-                    "palm_thickness": "3mm",
-                    "wrist_strap": "Adjustable velcro",
-                    "finger_style": "Half-finger design"
-                }
+                "material": "100% Natural latex",
+                "resistance_levels": "Light, Medium, Heavy, Extra Heavy",
+                "includes": "4 bands, door anchor, handles, carry bag"
             },
-            "features": [
-                "Premium leather palm protection",
-                "Breathable mesh backing",
-                "Adjustable wrist support",
-                "Half-finger design for grip",
-                "Reinforced stress points",
-                "Machine washable"
-            ],
-            "tags": ["gloves", "grip", "protection", "calisthenics"],
-            "stock_quantity": 40,
-            "status": "active",
-            "rating": 4.4,
-            "review_count": 67
+            "benefits": ["Assisted muscle-ups", "Pull-up progression", "Portable training"],
+            "prerequisites": [],
+            "bundle_suggestions": ["wrist-wraps-performance", "liquid-chalk-pro"]
         },
         {
-            "name": "Calisthenics Training Shirt",
-            "description": "Moisture-wicking performance shirt for intense workouts",
-            "long_description": "Premium athletic shirt designed for calisthenics training. Features moisture-wicking fabric technology, 4-way stretch for full range of motion, and motivational calisthenics graphics. Comfortable fit that moves with your body during the most challenging workouts.",
-            "category": "apparel",
-            "price": 34.99,
+            "id": "elastic-bands-warmup",
+            "name": "Elastic Warm-up Bands",
+            "description": "Specialized warm-up solution with two resistance levels for pre-workout preparation and mobility enhancement.",
+            "price": 24.99,
+            "category": "equipment",
+            "subcategory": "resistance-systems",
+            "skill_levels": ["beginner", "intermediate", "advanced"],
+            "stock_quantity": 92,
+            "rating": 4.6,
+            "review_count": 189,
             "images": [
-                "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab",
-                "https://images.unsplash.com/photo-1556821840-3a63f95609a7",
-                "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab"
+                "https://images.pexels.com/photos/7671467/pexels-photo-7671467.jpeg",
+                "https://images.pexels.com/photos/6389893/pexels-photo-6389893.jpeg"
             ],
-            "assets_3d": {
-                "model_url": "https://cdn.shopify.com/s/files/1/models/workout-shirt.glb",
-                "texture_urls": ["https://cdn.shopify.com/textures/athletic-fabric.jpg"],
-                "preview_image": "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab"
-            },
             "specifications": {
-                "dimensions": "Various sizes (XS-XXL)",
-                "weight": "0.4 lbs",
-                "material": "Polyester-spandex blend",
-                "color_options": ["Black", "Grey", "Navy", "Forest Green"],
-                "additional_specs": {
-                    "fabric_blend": "88% polyester, 12% spandex",
-                    "fit_type": "Athletic fit",
-                    "sleeve_type": "Short sleeve"
-                }
+                "material": "100% Natural latex",
+                "resistance": "Light (4-7kg), Medium (7-9kg)",
+                "includes": "2 bands, carrying bag"
             },
-            "features": [
-                "Moisture-wicking technology",
-                "4-way stretch fabric",
-                "Motivational calisthenics design",
-                "Tagless comfort",
-                "Anti-odor treatment",
-                "Machine washable"
+            "benefits": ["Pre-workout activation", "Mobility enhancement", "Injury prevention"],
+            "prerequisites": [],
+            "bundle_suggestions": ["premium-resistance-bands", "workout-rings-set"]
+        },
+        {
+            "id": "wrist-wraps-performance",
+            "name": "Performance Wrist Wraps",
+            "description": "Essential wrist protection and support for pushing exercises and static holds. Enables longer, safer training sessions.",
+            "price": 19.99,
+            "category": "equipment",
+            "subcategory": "support-systems",
+            "skill_levels": ["intermediate", "advanced", "elite"],
+            "stock_quantity": 67,
+            "rating": 4.7,
+            "review_count": 156,
+            "images": [
+                "https://images.pexels.com/photos/6388357/pexels-photo-6388357.jpeg",
+                "https://images.unsplash.com/photo-1434754205268-ad3b5f549b11?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2Nzh8MHwxfHNlYXJjaHwzfHx3ZWlnaHQlMjB2ZXN0fGVufDB8fHxibGFja3wxNzQ4Mzc1ODM5fDA&ixlib=rb-4.1.0&q=85"
             ],
-            "tags": ["shirt", "apparel", "moisture-wicking", "training"],
-            "stock_quantity": 60,
-            "status": "active",
+            "specifications": {
+                "material": "Neoprene with velcro closure",
+                "length": "18 inches",
+                "support_level": "Medium to High"
+            },
+            "benefits": ["Wrist strain prevention", "Enhanced stability", "Extended training sessions"],
+            "prerequisites": [],
+            "bundle_suggestions": ["parallettes-premium-set", "handstand-blocks"]
+        },
+
+        # PARALLETTES AND PUSH-UP EQUIPMENT
+        {
+            "id": "parallettes-premium-set",
+            "name": "Premium Parallettes Set",
+            "description": "Complete parallettes collection with Max (30cm), Pro (10cm), and Active (compact) variants for comprehensive training applications.",
+            "price": 189.99,
+            "discount_price": 159.99,
+            "category": "equipment",
+            "subcategory": "parallettes",
+            "skill_levels": ["intermediate", "advanced", "elite"],
+            "stock_quantity": 34,
+            "rating": 4.9,
+            "review_count": 87,
+            "images": [
+                "https://images.pexels.com/photos/7671467/pexels-photo-7671467.jpeg",
+                "https://images.pexels.com/photos/6091649/pexels-photo-6091649.jpeg"
+            ],
+            "specifications": {
+                "material": "Beech wood handles, steel base",
+                "handle_diameter": "40mm",
+                "weight_capacity": "500kg per pair"
+            },
+            "benefits": ["Handstand training", "Planche progression", "L-sit development"],
+            "prerequisites": ["basic-push-ups", "hollow-body-hold"],
+            "bundle_suggestions": ["wrist-wraps-performance", "grip-tape"]
+        },
+        {
+            "id": "parallettes-max",
+            "name": "Parallettes Max (30cm)",
+            "description": "Maximum height parallettes offering the greatest exercise variety and progression options for advanced practitioners.",
+            "price": 79.99,
+            "category": "equipment",
+            "subcategory": "parallettes",
+            "skill_levels": ["advanced", "elite"],
+            "stock_quantity": 45,
+            "rating": 4.8,
+            "review_count": 123,
+            "images": [
+                "https://images.pexels.com/photos/7672096/pexels-photo-7672096.jpeg",
+                "https://images.pexels.com/photos/6389893/pexels-photo-6389893.jpeg"
+            ],
+            "specifications": {
+                "height": "30cm",
+                "material": "Beech wood handles",
+                "base": "Non-slip rubber feet"
+            },
+            "benefits": ["Maximum exercise variety", "Advanced progressions", "Elevated movements"],
+            "prerequisites": ["handstand-basics", "L-sit-progression"],
+            "bundle_suggestions": ["parallettes-pro", "liquid-chalk-pro"]
+        },
+        {
+            "id": "parallettes-pro",
+            "name": "Parallettes Pro (10cm)",
+            "description": "Professional-grade parallettes providing optimal stability for handstands, planches, and core exercises.",
+            "price": 69.99,
+            "category": "equipment",
+            "subcategory": "parallettes",
+            "skill_levels": ["intermediate", "advanced"],
+            "stock_quantity": 58,
+            "rating": 4.7,
+            "review_count": 98,
+            "images": [
+                "https://images.pexels.com/photos/6388357/pexels-photo-6388357.jpeg",
+                "https://images.pexels.com/photos/7671467/pexels-photo-7671467.jpeg"
+            ],
+            "specifications": {
+                "height": "10cm",
+                "material": "Beech wood handles",
+                "stability": "Wide base design"
+            },
+            "benefits": ["Handstand stability", "Planche training", "Core strengthening"],
+            "prerequisites": ["basic-handstand", "push-up-variations"],
+            "bundle_suggestions": ["wrist-wraps-performance", "handstand-blocks"]
+        },
+
+        # SUSPENSION AND RING TRAINING
+        {
+            "id": "workout-rings-set",
+            "name": "Professional Workout Rings",
+            "description": "Olympic standard birch wood rings with precision straps for advanced upper body development and gymnastic movements.",
+            "price": 89.99,
+            "discount_price": 74.99,
+            "category": "equipment",
+            "subcategory": "suspension-training",
+            "skill_levels": ["intermediate", "advanced", "elite"],
+            "stock_quantity": 41,
+            "rating": 4.9,
+            "review_count": 156,
+            "images": [
+                "https://images.pexels.com/photos/7672096/pexels-photo-7672096.jpeg",
+                "https://images.unsplash.com/photo-1434754205268-ad3b5f549b11?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2Nzh8MHwxfHNlYXJjaHwzfHx3ZWlnaHQlMjB2ZXN0fGVufDB8fHxibGFja3wxNzQ4Mzc1ODM5fDA&ixlib=rb-4.1.0&q=85"
+            ],
+            "specifications": {
+                "material": "Birch wood rings",
+                "diameter": "18cm, thickness 2.8cm",
+                "capacity": "300kg per side"
+            },
+            "benefits": ["Muscle-up development", "Ring dips", "Gymnastic strength"],
+            "prerequisites": ["pull-ups", "dips"],
+            "bundle_suggestions": ["premium-resistance-bands", "liquid-chalk-pro"]
+        },
+
+        # WEIGHTED TRAINING EQUIPMENT
+        {
+            "id": "premium-dip-belt",
+            "name": "Premium Dip Belt",
+            "description": "Laboratory-tested heavy-duty dip belt supporting up to 1000kg. Available with stainless steel chain or lightweight rope options.",
+            "price": 59.99,
+            "category": "equipment",
+            "subcategory": "weighted-training",
+            "skill_levels": ["intermediate", "advanced", "elite"],
+            "stock_quantity": 29,
+            "rating": 4.8,
+            "review_count": 134,
+            "images": [
+                "https://images.pexels.com/photos/6388357/pexels-photo-6388357.jpeg",
+                "https://images.pexels.com/photos/6389893/pexels-photo-6389893.jpeg"
+            ],
+            "specifications": {
+                "capacity": "1000kg tested",
+                "chain": "Stainless steel, 90cm",
+                "padding": "Neoprene comfort padding"
+            },
+            "benefits": ["Progressive overload", "Weighted dips", "Weighted pull-ups"],
+            "prerequisites": ["bodyweight-dips", "pull-ups"],
+            "bundle_suggestions": ["elite-weight-vest", "workout-rings-set"]
+        },
+        {
+            "id": "elite-weight-vest-10kg",
+            "name": "Elite Weight Vest (10kg)",
+            "description": "Adjustable weight vest with removable 1kg iron blocks. Compact, body-hugging design prevents weight shifting during movement.",
+            "price": 149.99,
+            "discount_price": 129.99,
+            "category": "equipment",
+            "subcategory": "weighted-training",
+            "skill_levels": ["intermediate", "advanced"],
+            "stock_quantity": 18,
+            "rating": 4.7,
+            "review_count": 89,
+            "images": [
+                "https://images.unsplash.com/photo-1434754205268-ad3b5f549b11?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2Nzh8MHwxfHNlYXJjaHwzfHx3ZWlnaHQlMjB2ZXN0fGVufDB8fHxibGFja3wxNzQ4Mzc1ODM5fDA&ixlib=rb-4.1.0&q=85",
+                "https://images.pexels.com/photos/6388357/pexels-photo-6388357.jpeg"
+            ],
+            "specifications": {
+                "weight": "10kg adjustable",
+                "increments": "1kg removable blocks",
+                "design": "Body-hugging fit"
+            },
+            "benefits": ["Dynamic weighted training", "Progressive loading", "Full movement freedom"],
+            "prerequisites": ["bodyweight-mastery", "endurance-base"],
+            "bundle_suggestions": ["premium-dip-belt", "performance-apparel"]
+        },
+        {
+            "id": "elite-weight-vest-20kg",
+            "name": "Elite Weight Vest (20kg)",
+            "description": "Professional-grade 20kg weight vest for advanced athletes. Features velcro patches for personalization and maximum load capacity.",
+            "price": 199.99,
+            "discount_price": 169.99,
+            "category": "equipment",
+            "subcategory": "weighted-training",
+            "skill_levels": ["advanced", "elite"],
+            "stock_quantity": 12,
+            "rating": 4.9,
+            "review_count": 67,
+            "images": [
+                "https://images.pexels.com/photos/7671467/pexels-photo-7671467.jpeg",
+                "https://images.pexels.com/photos/6091649/pexels-photo-6091649.jpeg"
+            ],
+            "specifications": {
+                "weight": "20kg adjustable",
+                "increments": "1kg removable blocks",
+                "customization": "Velcro patch areas"
+            },
+            "benefits": ["Elite training loads", "Competitive preparation", "Maximum resistance"],
+            "prerequisites": ["advanced-strength", "weighted-experience"],
+            "bundle_suggestions": ["premium-dip-belt", "competition-apparel"]
+        },
+
+        # GRIP ENHANCEMENT PRODUCTS
+        {
+            "id": "liquid-chalk-pro",
+            "name": "Premium Liquid Chalk",
+            "description": "Professional-grade liquid chalk with fast-drying, dust-free formula. Superior grip enhancement for all training sessions.",
+            "price": 16.99,
+            "category": "accessories",
+            "subcategory": "grip-enhancement",
+            "skill_levels": ["beginner", "intermediate", "advanced", "elite"],
+            "stock_quantity": 156,
+            "rating": 4.6,
+            "review_count": 298,
+            "images": [
+                "https://images.pexels.com/photos/6389893/pexels-photo-6389893.jpeg",
+                "https://images.pexels.com/photos/7672096/pexels-photo-7672096.jpeg"
+            ],
+            "specifications": {
+                "volume": "200ml",
+                "formula": "Fast-drying, dust-free",
+                "scent": "Pleasant, non-intrusive"
+            },
+            "benefits": ["Enhanced grip", "Sweat resistance", "Clean application"],
+            "prerequisites": [],
+            "bundle_suggestions": ["workout-rings-set", "parallettes-premium-set"]
+        },
+        {
+            "id": "grip-tape-professional",
+            "name": "Professional Grip Tape",
+            "description": "High-quality cotton grip tape that absorbs moisture and prevents slipping. Applies to any equipment without residue.",
+            "price": 12.99,
+            "category": "accessories",
+            "subcategory": "grip-enhancement",
+            "skill_levels": ["intermediate", "advanced", "elite"],
+            "stock_quantity": 89,
+            "rating": 4.5,
+            "review_count": 167,
+            "images": [
+                "https://images.pexels.com/photos/7671467/pexels-photo-7671467.jpeg",
+                "https://images.pexels.com/photos/6388357/pexels-photo-6388357.jpeg"
+            ],
+            "specifications": {
+                "material": "100% Cotton",
+                "length": "10m roll",
+                "application": "No residue removal"
+            },
+            "benefits": ["Moisture absorption", "Custom grip zones", "Equipment protection"],
+            "prerequisites": [],
+            "bundle_suggestions": ["parallettes-pro", "workout-rings-set"]
+        },
+
+        # PERFORMANCE TRAINING WEAR
+        {
+            "id": "performance-training-tee",
+            "name": "Performance Training T-Shirt",
+            "description": "High-performance athletic t-shirt with raglan sleeves and moisture-wicking technology for intense training sessions.",
+            "price": 34.99,
+            "category": "apparel",
+            "subcategory": "performance-wear",
+            "skill_levels": ["beginner", "intermediate", "advanced"],
+            "stock_quantity": 145,
+            "rating": 4.4,
+            "review_count": 189,
+            "images": [
+                "https://images.pexels.com/photos/6388357/pexels-photo-6388357.jpeg",
+                "https://images.pexels.com/photos/6091649/pexels-photo-6091649.jpeg"
+            ],
+            "specifications": {
+                "material": "90% Polyester, 10% Spandex",
+                "fit": "Athletic raglan sleeves",
+                "technology": "Moisture-wicking"
+            },
+            "benefits": ["Breathability", "Movement freedom", "Sweat management"],
+            "prerequisites": [],
+            "bundle_suggestions": ["performance-shorts", "wrist-wraps-performance"]
+        },
+        {
+            "id": "competition-tank-top",
+            "name": "Competition Tank Top",
+            "description": "Ultralight competition-grade tank top with 100% polyester construction for maximum breathability during events.",
+            "price": 29.99,
+            "discount_price": 24.99,
+            "category": "apparel",
+            "subcategory": "competition-wear",
+            "skill_levels": ["advanced", "elite"],
+            "stock_quantity": 67,
+            "rating": 4.7,
+            "review_count": 98,
+            "images": [
+                "https://images.pexels.com/photos/7672096/pexels-photo-7672096.jpeg",
+                "https://images.unsplash.com/photo-1434754205268-ad3b5f549b11?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2Nzh8MHwxfHNlYXJjaHwzfHx3ZWlnaHQlMjB2ZXN0fGVufDB8fHxibGFja3wxNzQ4Mzc1ODM5fDA&ixlib=rb-4.1.0&q=85"
+            ],
+            "specifications": {
+                "material": "100% Polyester",
+                "weight": "Ultralight",
+                "design": "Competition cut"
+            },
+            "benefits": ["Maximum breathability", "Competition ready", "Lightweight"],
+            "prerequisites": [],
+            "bundle_suggestions": ["competition-shorts", "elite-weight-vest-20kg"]
+        },
+
+        # LIFESTYLE AND CASUAL WEAR
+        {
+            "id": "premium-training-hoodie",
+            "name": "Premium Training Hoodie",
+            "description": "Heavy-weight premium hoodie with Japanese-inspired design elements. Perfect blend of athletic performance and street fashion.",
+            "price": 79.99,
+            "discount_price": 67.99,
+            "category": "apparel",
+            "subcategory": "lifestyle-wear",
+            "skill_levels": ["beginner", "intermediate", "advanced"],
+            "stock_quantity": 78,
+            "rating": 4.8,
+            "review_count": 156,
+            "images": [
+                "https://images.pexels.com/photos/6091649/pexels-photo-6091649.jpeg",
+                "https://images.pexels.com/photos/6389893/pexels-photo-6389893.jpeg"
+            ],
+            "specifications": {
+                "material": "50% Cotton, 50% Polyester",
+                "weight": "400g/m²",
+                "design": "Oversized fit"
+            },
+            "benefits": ["Premium comfort", "Street style", "Versatile wear"],
+            "prerequisites": [],
+            "bundle_suggestions": ["vintage-tank-top", "training-joggers"]
+        },
+        {
+            "id": "vintage-tank-top",
+            "name": "Vintage Athletic Tank Top",
+            "description": "Classic styling tank top with traditional athletic aesthetics. Comfortable cotton blend with loose fit design.",
+            "price": 24.99,
+            "category": "apparel",
+            "subcategory": "lifestyle-wear",
+            "skill_levels": ["beginner", "intermediate", "advanced"],
+            "stock_quantity": 134,
             "rating": 4.3,
-            "review_count": 45
+            "review_count": 134,
+            "images": [
+                "https://images.pexels.com/photos/7671467/pexels-photo-7671467.jpeg",
+                "https://images.pexels.com/photos/6388357/pexels-photo-6388357.jpeg"
+            ],
+            "specifications": {
+                "material": "60% Cotton, 40% Polyester",
+                "fit": "Loose, comfortable",
+                "style": "Classic athletic"
+            },
+            "benefits": ["Classic comfort", "Timeless style", "Versatile wear"],
+            "prerequisites": [],
+            "bundle_suggestions": ["premium-training-hoodie", "performance-training-tee"]
         }
     ]
     
