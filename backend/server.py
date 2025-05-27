@@ -217,7 +217,8 @@ async def seed_products():
     # Check if products already exist
     existing_count = await db.products.count_documents({})
     if existing_count > 0:
-        return {"message": f"Products already exist ({existing_count} products). Skipping seed."}
+        print(f"Products collection already has {existing_count} documents. Skipping seeding.")
+        return {"message": f"Products already seeded. Current count: {existing_count}"}
     
     sample_products = [
         {
